@@ -99,6 +99,34 @@ function toMedical(row: ExcelRow): MedicalCase {
   };
 }
 
+function toOtherProrate(row: ExcelRow): OtherProrateCase {
+  return {
+    id: row.id,
+    action: s(row.action),
+    employee: s(row.employee),
+    period: s(row.period),
+    tarif: s(row.tarif),
+    rate: s(row.rate),
+    payment: s(row.payment),
+    remarks: s(row.remarks),
+  };
+}
+
+function toProrate(row: ExcelRow): ProrateCase {
+  return {
+    id: row.id,
+    action: s(row.action),
+    employee: s(row.employee),
+    dateOfEntry: s(row.dateofentry),
+    period: s(row.period),
+    days: s(row.days),
+    from80: s(row.from80),
+    to80: s(row.to80),
+    from100: s(row.from100),
+    to100: s(row.to100),
+  };
+}
+
 
 
 const sheets = readAllSheets(DATA_FILE);
@@ -171,71 +199,29 @@ test.describe("Master KKP", () => {
     });
   }
 
-  const otherAdd: OtherProrateCase = {
-    id: 1,
-    action: "add",
-    employee: "RIMBUN SIBURIAN",
-    period: "2026-01",
-    tarif: 10,
-    rate: 2.3,
-    payment: "Taxi online claim",
-    remarks: "Remark taxi online claim",
-  };
+  for (const [idx, row] of (sheets.OtherProrate ?? []).entries()) {
+    const c = toOtherProrate(row);
+    test(`[Other Prorate] ${c.action} - ${c.payment} (#${idx + 1})`, async ({ page }) => {
+      if (c.action.toLowerCase() === "add") {
+        const { token } = await apiLogin(API_CFG);
+        await deleteProrateOthersForEmployee(API_CFG, token, c.employee);
+        await ensureEmployeeRegulerThp(API_CFG, token, c.employee);
+      }
+      const p = new OtherProratePage(page);
+      await p.goto();
+      if (c.action.toLowerCase() === "add") await p.addOther(c);
+      else await p.editOther(c);
+    });
+  }
 
-  const otherEdit: OtherProrateCase = {
-    ...otherAdd,
-    id: 2,
-    action: "edit",
-    rate: 2.5,
-    remarks: "Remark taxi online claim updated",
-  };
-
-  const prorateAdd: ProrateCase = {
-    id: 1,
-    action: "add",
-    employee: "RIMBUN SIBURIAN",
-    dateOfEntry: "2026-01-07",
-    period: "2026-01",
-    days: 31,
-    from80: "2026-01-07",
-    to80: "2026-01-14",
-    from100: "2026-01-15",
-    to100: "2026-01-31",
-  };
-
-  const prorateEdit: ProrateCase = {
-    ...prorateAdd,
-    id: 2,
-    action: "edit",
-    days: 30,
-  };
-
-  test("[Other Prorate] Add - Taxi online claim (Januari 2026)", async ({ page }) => {
-    const { token } = await apiLogin(API_CFG);
-    await deleteProrateOthersForEmployee(API_CFG, token, "RIMBUN SIBURIAN");
-    await ensureEmployeeRegulerThp(API_CFG, token, "RIMBUN SIBURIAN");
-    const p = new OtherProratePage(page);
-    await p.goto();
-    await p.addOther(otherAdd);
-  });
-
-  test("[Other Prorate] Edit - rate 2.5", async ({ page }) => {
-    const p = new OtherProratePage(page);
-    await p.goto();
-    await p.editOther(otherEdit);
-  });
-
-  test("[Prorate] Add - Januari 2026 (31 hari)", async ({ page }) => {
-    const p = new OtherProratePage(page);
-    await p.goto();
-    await p.openTab("Prorate");
-    await p.addProrate(prorateAdd);
-  });
-
-  test("[Prorate] Edit - number of days 30", async ({ page }) => {
-    const p = new OtherProratePage(page);
-    await p.goto();
-    await p.openTab("Prorate");
-    await p.editProrate(prorateEdit);
-  });
+  for (const [idx, row] of (sheets.Prorate ?? []).entries()) {
+    const c = toProrate(row);
+    test(`[Prorate] ${c.action} - ${c.days} days (#${idx + 1})`, async ({ page }) => {
+      const p = new OtherProratePage(page);
+      await p.goto();
+      await p.openTab("Prorate");
+      if (c.action.toLowerCase() === "add") await p.addProrate(c);
+      else await p.editProrate(c);
+    });
+  }
 });
