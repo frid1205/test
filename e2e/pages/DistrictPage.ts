@@ -1,5 +1,5 @@
 import { type Locator, type Page, expect } from "@playwright/test";
-import { chooseCombobox, clickRowEdit, currencyFormat, pickMonth, submitAndWait } from "../helpers/ui";
+import { MONTH_NAMES_ID, chooseCombobox, currencyFormat, pickMonth, submitAndWait } from "../helpers/ui";
 
 export interface DistrictCase {
   id: string | number;
@@ -46,7 +46,7 @@ export class DistrictPage {
       data.municipio,
       data.municipio,
     );
-    await pickMonth(this.page, dialog.locator("#lbl_d31214_period_374"), "Agustus", data.period.slice(0, 4));
+    await pickMonth(this.page, dialog.locator("#lbl_d31214_period_374"), MONTH_NAMES_ID[Number(data.period.slice(5, 7)) - 1], data.period.slice(0, 4));
     await dialog.locator("#lbl_d31214_meal_403").fill(String(data.meal));
     await dialog.locator("#lbl_d31214_districtallowance_417").fill(String(data.districtAllowance));
   }
@@ -59,7 +59,8 @@ export class DistrictPage {
   }
 
   async edit(data: DistrictCase): Promise<void> {
-    await clickRowEdit(this.page, data.employee);
+    const row = await this.findRow(data);
+    await row.getByRole("button", { name: "Edit" }).click();
     await expect(this.dialog).toBeVisible();
     const dialog = this.dialog;
     await dialog.locator("#lbl_d31214_meal_403").fill(String(data.meal));
@@ -68,8 +69,31 @@ export class DistrictPage {
     await this.verifyRow(data);
   }
 
-  private async verifyRow(data: DistrictCase): Promise<void> {
+  /** Filter periode tabel (default bulan berjalan) agar baris periode target terlihat. */
+  private async setPeriodFilter(yearMonth: string): Promise<void> {
+    const [year, month] = yearMonth.split("-");
+    const trigger = this.page.getByRole("button", { name: new RegExp(`^(${MONTH_NAMES_ID.join("|")}) \\d{4}$`) }).first();
+    await expect(trigger).toBeVisible({ timeout: 30_000 });
+    await pickMonth(this.page, trigger, MONTH_NAMES_ID[Number(month) - 1], year);
+    await this.page.waitForTimeout(500);
+  }
+
+  /** Cari berdasarkan nama di kotak Search tabel. */
+  private async search(name: string): Promise<void> {
+    await this.page.getByPlaceholder("Search...").fill(name);
+  }
+
+  /** Filter tahun+bulan lalu cari nama, kembalikan baris target. */
+  private async findRow(data: DistrictCase): Promise<Locator> {
+    await this.setPeriodFilter(data.period);
+    await this.search(data.employee);
     const row = this.page.locator("tbody tr", { hasText: data.employee }).first();
+    await expect(row).toBeVisible({ timeout: 30_000 });
+    return row;
+  }
+
+  private async verifyRow(data: DistrictCase): Promise<void> {
+    const row = await this.findRow(data);
     await expect(row).toBeVisible({ timeout: 20_000 });
     await expect(row).toContainText(data.municipio);
     await expect(row).toContainText(data.period);

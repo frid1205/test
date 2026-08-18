@@ -529,6 +529,63 @@ export async function deleteCustomForEmployee(
   throw new Error(`deleteCustomForEmployee: ${res.status} ${await res.text()}`);
 }
 
+/** Hapus custom benefit berdasarkan title (untuk idempotensi test custom benefit setting). */
+export async function deleteCustomBenefitByTitle(
+  cfg: PayrollApiConfig,
+  token: string,
+  title: string,
+): Promise<number> {
+  const listRes = await fetch(`${cfg.baseUrl}/api/custom-benefits?search=${encodeURIComponent(title)}&per_page=100`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!listRes.ok) {
+    throw new Error(`deleteCustomBenefitByTitle: list failed: ${listRes.status} ${await listRes.text()}`);
+  }
+  const body = await listRes.json();
+  const records: Array<{ uuid: string; title?: string }> = body?.data ?? [];
+  let deleted = 0;
+  for (const rec of records) {
+    if ((rec.title ?? "").toUpperCase() !== title.toUpperCase()) continue;
+    const delRes = await fetch(`${cfg.baseUrl}/api/custom-benefits/delete/${rec.uuid}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (delRes.ok || delRes.status === 404) deleted++;
+    else console.warn(`[deleteCustomBenefitByTitle] delete ${rec.uuid} -> ${delRes.status}`);
+  }
+  console.log(`[deleteCustomBenefitByTitle] "${title}": ${deleted} record(s) deleted`);
+  return deleted;
+}
+
+/** Hapus custom deduction berdasarkan title (untuk idempotensi test custom deduction setting). */
+export async function deleteCustomDeductionByTitle(
+  cfg: PayrollApiConfig,
+  token: string,
+  title: string,
+): Promise<number> {
+  if (!title) return 0;
+  const listRes = await fetch(`${cfg.baseUrl}/api/custom-deductions?search=${encodeURIComponent(title)}&per_page=100`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!listRes.ok) {
+    throw new Error(`deleteCustomDeductionByTitle: list failed: ${listRes.status} ${await listRes.text()}`);
+  }
+  const body = await listRes.json();
+  const records: Array<{ uuid: string; title?: string }> = body?.data ?? [];
+  let deleted = 0;
+  for (const rec of records) {
+    if ((rec.title ?? "").toUpperCase() !== title.toUpperCase()) continue;
+    const delRes = await fetch(`${cfg.baseUrl}/api/custom-deductions/delete/${rec.uuid}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (delRes.ok || delRes.status === 404) deleted++;
+    else console.warn(`[deleteCustomDeductionByTitle] delete ${rec.uuid} -> ${delRes.status}`);
+  }
+  console.log(`[deleteCustomDeductionByTitle] "${title}": ${deleted} record(s) deleted`);
+  return deleted;
+}
+
 /** Representasi item payroll-report untuk periode tertentu (dipakai helper Report KKP). */
 export interface PayrollReportItem {
   uuid: string;

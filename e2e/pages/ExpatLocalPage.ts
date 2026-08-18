@@ -15,10 +15,21 @@ export interface ExpatLocalCase {
   employerSeguranca: string | number;
   employer13Seguranca: string | number;
   totalEmployerExpected: string | number; // total employer contribution (USD)
+  customFields: Record<string, string>; // label custom deduction -> nilai
 }
 
 const refRateOption = (rate: string | number): string =>
   `Rp ${Number(rate).toLocaleString("id-ID")}`;
+
+// Label field system deduction (judul custom deduction) yang muncul di form Expat Local.
+const EXPAT_FIELD_LABELS = {
+  zakat: "Zakat/THR",
+  employeeDeduction: "Employee Deduction",
+  employeeSeguranca: "Employee Seguranca",
+  employee13Seguranca: "Employee 13th Salary Seguranca",
+  employerSeguranca: "Employer Contribution Seguranca",
+  employer13Seguranca: "Employer Contribution 13th Salary Seguranca",
+};
 
 export class ExpatLocalPage {
   private readonly dialog: Locator;
@@ -61,13 +72,23 @@ export class ExpatLocalPage {
       const [year, month] = data.period.split("-");
       await pickMonth(this.page, dialog.locator("#lbl_2a8007_period_408"), MONTH_NAMES_ID[Number(month) - 1], year);
     }
-    await chooseSelect(this.page, dialog.locator("#lbl_2a8007_zakatthrtype_427"), "Amount");
-    await dialog.locator("#lbl_2a8007_zakatthrvalue_419").fill(String(data.zakat));
-    await dialog.locator("#lbl_2a8007_employeedeductionamount_457").fill(String(data.employeeDeduction));
-    await dialog.locator("#lbl_2a8007_employeeseguranca_478").fill(String(data.employeeSeguranca));
-    await dialog.locator("#lbl_2a8007_employee13salaryseguranca_496").fill(String(data.employee13Seguranca));
-    await dialog.locator("#lbl_2a8007_employeecontributionseguranca_529").fill(String(data.employerSeguranca));
-    await dialog.locator("#lbl_2a8007_employeecontribution13salaryseguranca_547").fill(String(data.employer13Seguranca));
+    const zakatField = dialog.getByText(EXPAT_FIELD_LABELS.zakat, { exact: true }).locator("..");
+    await chooseSelect(this.page, zakatField.locator("[role=combobox]").first(), "Amount");
+    await dialog.getByLabel(EXPAT_FIELD_LABELS.zakat).fill(String(data.zakat));
+    await dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction).fill(String(data.employeeDeduction));
+    await dialog.getByLabel(EXPAT_FIELD_LABELS.employeeSeguranca).fill(String(data.employeeSeguranca));
+    await dialog.getByLabel(EXPAT_FIELD_LABELS.employee13Seguranca).fill(String(data.employee13Seguranca));
+    await dialog.getByLabel(EXPAT_FIELD_LABELS.employerSeguranca).fill(String(data.employerSeguranca));
+    await dialog.getByLabel(EXPAT_FIELD_LABELS.employer13Seguranca).fill(String(data.employer13Seguranca));
+    await this.fillCustomFields(data);
+  }
+
+  /** Isi custom deduction field berdasarkan label (kolom dinamis dari Excel). */
+  private async fillCustomFields(data: ExpatLocalCase): Promise<void> {
+    for (const [label, value] of Object.entries(data.customFields)) {
+      if (value === "" || value === undefined) continue;
+      await this.dialog.getByLabel(label).fill(String(value));
+    }
   }
 
   async add(data: ExpatLocalCase): Promise<void> {
@@ -89,8 +110,9 @@ export class ExpatLocalPage {
     await expect(this.dialog).toBeVisible();
     await employeesLoaded;
     await refsLoaded;
-    await expect(this.dialog.locator("#lbl_2a8007_employeedeductionamount_457")).toHaveValue(/.+/, { timeout: 30_000 });
-    await this.dialog.locator("#lbl_2a8007_employeedeductionamount_457").fill(String(data.employeeDeduction));
+    await expect(this.dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction)).toHaveValue(/.+/, { timeout: 30_000 });
+    await this.dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction).fill(String(data.employeeDeduction));
+    await this.fillCustomFields(data);
     await submitAndWait(this.page, this.dialog, "Save", "/master-salary-deduction-expat-local/store", "Expat Local deduction updated successfully");
     await this.verifyRow(data);
   }

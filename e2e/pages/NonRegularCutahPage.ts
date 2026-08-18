@@ -1,11 +1,14 @@
 import { type Locator, type Page, expect } from "@playwright/test";
-import { MONTH_NAMES_ID, chooseCombobox, clickMonthCell, formField, pickMonth } from "../helpers/ui";
+import { MONTH_NAMES_ID, chooseCombobox, chooseSelect, formField, pickMonth } from "../helpers/ui";
 
 export interface CutahCase {
   id: string | number;
   action: "add" | "edit" | "delete";
   employee: string;
-  period: string; // YYYY-MM
+  period: string; // YYYY-MM (edit: bulan yang diklik; delete: tahun)
+  startPeriod: string; // YYYY-MM (add)
+  endPeriod: string; // YYYY-MM (add)
+  salary: string | number; // edit
   rate: string | number;
   totalExpected: string | number;
 }
@@ -39,9 +42,10 @@ export class NonRegularCutahPage {
   private async fillForm(data: CutahCase): Promise<void> {
     await chooseCombobox(this.page, this.dialog, this.dialog.getByRole("combobox").first(), data.employee, data.employee);
     await expect(this.field("Band").locator("input")).toHaveValue(/.+/, { timeout: 20_000 });
-    const [year, month] = data.period.split("-");
-    await pickMonth(this.page, this.field("Start Period").locator("button").first(), MONTH_NAMES_ID[Number(month) - 1], year);
-    await pickMonth(this.page, this.field("End Period").locator("button").first(), MONTH_NAMES_ID[Number(month) - 1], year);
+    const [sYear, sMonth] = data.startPeriod.split("-");
+    await pickMonth(this.page, this.field("Start Period").locator("button").first(), MONTH_NAMES_ID[Number(sMonth) - 1], sYear);
+    const [eYear, eMonth] = data.endPeriod.split("-");
+    await pickMonth(this.page, this.field("End Period").locator("button").first(), MONTH_NAMES_ID[Number(eMonth) - 1], eYear);
     await this.field("Rate").locator("input").fill(String(data.rate));
   }
 
@@ -52,12 +56,34 @@ export class NonRegularCutahPage {
     await this.verifyRow(data);
   }
 
+  /** Index kolom bulan pada tabel (yearly): Jan-Feb=0, Mar=1, ..., Aug=6, ..., Dec=10. */
+  private monthCellIndex(period: string): number {
+    const m = Number(period.slice(5, 7));
+    return m <= 2 ? 0 : m - 2;
+  }
+
+  private async selectYear(year: string): Promise<void> {
+    await chooseSelect(this.page, this.page.getByRole("combobox").first(), year);
+  }
+
+  private async search(name: string): Promise<void> {
+    await this.page.getByPlaceholder("Search...").fill(name);
+  }
+
   async edit(data: CutahCase): Promise<void> {
+    await this.selectYear(data.period.slice(0, 4));
+    await this.search(data.employee);
     const row = this.page.locator("tbody tr", { hasText: data.employee }).first();
     await expect(row).toBeVisible({ timeout: 60_000 });
-    await clickMonthCell(row);
+    await row.locator("[role=button][title='Klik untuk edit']").nth(this.monthCellIndex(data.period)).click();
     await expect(this.dialog).toBeVisible();
-    await expect(this.field("Rate").locator("input")).toHaveValue(/.+/, { timeout: 30_000 });
+
+    // edit via cell: start & end period terkunci, hanya salary & rate yang bisa diubah
+    await expect(this.field("Start Period").locator("button").first()).toBeDisabled();
+    await expect(this.field("End Period").locator("button").first()).toBeDisabled();
+    await expect(this.field("Salary").locator("input")).toHaveValue(/.+/, { timeout: 30_000 });
+
+    await this.field("Salary").locator("input").fill(String(data.salary));
     await this.field("Rate").locator("input").fill(String(data.rate));
     await this.submitDialog("Update", "/non-regular-salary-annual-leave/store");
     await this.verifyRow(data);

@@ -99,6 +99,9 @@ function toCutah(row: ExcelRow): CutahCase {
     action: s(row.action) as CutahCase["action"],
     employee: s(row.employee),
     period: s(row.period),
+    startPeriod: s(row.startperiod),
+    endPeriod: s(row.endperiod),
+    salary: s(row.salary),
     rate: s(row.rate),
     totalExpected: s(row.totalexpected),
   };

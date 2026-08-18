@@ -12,10 +12,18 @@ export interface HomestaffCase {
   dplkEmployer: string | number; // dplk employer contribution (IDR)
   totalExpected: string | number; // total employee deduction (USD, hasil konversi)
   totalEmployerExpected: string | number; // total employer contribution (USD)
+  customFields: Record<string, string>; // label custom deduction -> nilai
 }
 
 const refRateOption = (rate: string | number): string =>
   `Rp ${Number(rate).toLocaleString("id-ID")}`;
+
+// Label field system deduction (judul custom deduction) yang muncul di form Homestaff.
+const HOMESTAFF_FIELD_LABELS = {
+  mandatory: "Mandatory Housing Allowance",
+  pension: "Pension Fund Contribution",
+  dplkEmployer: "DPLK Employer Contribution",
+};
 
 export class HomestaffPage {
   private readonly dialog: Locator;
@@ -60,9 +68,18 @@ export class HomestaffPage {
       const [year, month] = data.period.split("-");
       await pickMonth(this.page, dialog.locator("#lbl_0019c9_period_467"), MONTH_NAMES_ID[Number(month) - 1], year);
     }
-    await dialog.locator("#lbl_0019c9_mandatory_using_allowance_478").fill(String(data.mandatory));
-    await dialog.locator("#lbl_0019c9_pensionfundcontribution_501").fill(String(data.pension));
-    await dialog.locator("#lbl_0019c9_dplkemployercontribution_693").fill(String(data.dplkEmployer));
+    await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory).fill(String(data.mandatory));
+    await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.pension).fill(String(data.pension));
+    await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.dplkEmployer).fill(String(data.dplkEmployer));
+    await this.fillCustomFields(data);
+  }
+
+  /** Isi custom deduction field berdasarkan label (kolom dinamis dari Excel). */
+  private async fillCustomFields(data: HomestaffCase): Promise<void> {
+    for (const [label, value] of Object.entries(data.customFields)) {
+      if (value === "" || value === undefined) continue;
+      await this.dialog.getByLabel(label).fill(String(value));
+    }
   }
 
   async add(data: HomestaffCase): Promise<void> {
@@ -84,8 +101,9 @@ export class HomestaffPage {
     await expect(this.dialog).toBeVisible();
     await employeesLoaded;
     await refsLoaded;
-    await expect(this.dialog.locator("#lbl_0019c9_mandatory_using_allowance_478")).toHaveValue(/.+/, { timeout: 30_000 });
-    await this.dialog.locator("#lbl_0019c9_mandatory_using_allowance_478").fill(String(data.mandatory));
+    await expect(this.dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory)).toHaveValue(/.+/, { timeout: 30_000 });
+    await this.dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory).fill(String(data.mandatory));
+    await this.fillCustomFields(data);
     await submitAndWait(this.page, this.dialog, "Update", "/master-salary-deduction-homestaff/store", "Homestaff deduction updated successfully");
     await this.verifyRow(data);
   }

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import path from "node:path";
-import { readAllSheets, type ExcelRow } from "./helpers/excel-reader";
+import { readAllSheets, readSheetRaw, type ExcelRow } from "./helpers/excel-reader";
 import { HomestaffPage, type HomestaffCase } from "./pages/HomestaffPage";
 import { ExpatLocalPage, type ExpatLocalCase } from "./pages/ExpatLocalPage";
 import { apiLogin, ensureEmployeeRegulerThp, waitForSalaryDeductionRecordGone, type PayrollApiConfig } from "./helpers/api";
@@ -31,6 +31,7 @@ function toHomestaff(row: ExcelRow): HomestaffCase {
     dplkEmployer: s(row.dplkemployer),
     totalExpected: s(row.totalexpected),
     totalEmployerExpected: s(row.totalemployerexpected),
+    customFields: {},
   };
 }
 
@@ -49,16 +50,45 @@ function toExpatLocal(row: ExcelRow): ExpatLocalCase {
     employerSeguranca: s(row.employerseguranca),
     employer13Seguranca: s(row.employer13seguranca),
     totalEmployerExpected: s(row.totalemployerexpected),
+    customFields: {},
   };
 }
 
+const HOMESTAFF_FIXED = new Set([
+  "id", "action", "employee", "category", "period", "rate",
+  "mandatory", "pension", "dplkEmployer", "totalExpected", "totalEmployerExpected",
+]);
+const EXPAT_FIXED = new Set([
+  "id", "action", "employee", "category", "period", "rate", "zakat",
+  "employeeDeduction", "employeeSeguranca", "employee13Seguranca", "totalExpected",
+  "employerSeguranca", "employer13Seguranca", "totalEmployerExpected",
+]);
+
+/** Kolom di luar kolom fixed dianggap custom deduction (header = label di UI). */
+function buildCustomFields(
+  headers: string[],
+  row: Record<string, string | number>,
+  fixed: Set<string>,
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const h of headers) {
+    if (fixed.has(h)) continue;
+    const v = row[h];
+    if (v !== undefined && v !== "" && String(v).trim() !== "") out[h] = String(v);
+  }
+  return out;
+}
+
 const sheets = readAllSheets(DATA_FILE);
+const homestaffRaw = readSheetRaw(DATA_FILE, "Homestaff");
+const expatRaw = readSheetRaw(DATA_FILE, "ExpatLocal");
 
 test.describe("Salary Deduction - Homestaff", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of (sheets.Homestaff ?? []).entries()) {
     const c = toHomestaff(row);
+    c.customFields = buildCustomFields(homestaffRaw.headers, homestaffRaw.rows[idx], HOMESTAFF_FIXED);
     const label = c.period ? `periode ${c.period}` : "tanpa period";
     test(`[Homestaff] ${c.action} - ${c.employee} (${label}) (#${idx + 1})`, async ({ page }) => {
       const { token } = await apiLogin(API_CFG);
@@ -93,6 +123,7 @@ test.describe("Salary Deduction - Expat Local", () => {
 
   for (const [idx, row] of (sheets.ExpatLocal ?? []).entries()) {
     const c = toExpatLocal(row);
+    c.customFields = buildCustomFields(expatRaw.headers, expatRaw.rows[idx], EXPAT_FIXED);
     const label = c.period ? `periode ${c.period}` : "tanpa period";
     test(`[Expat Local] ${c.action} - ${c.employee} (${label}) (#${idx + 1})`, async ({ page }) => {
       const { token } = await apiLogin(API_CFG);

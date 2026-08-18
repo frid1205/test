@@ -112,7 +112,7 @@ test.describe("Login", () => {
   });
 });
 
-test.describe("Payroll RIMBUN SIBURIAN (Tambah & Edit)", () => {
+test.describe("Master KKP", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of (sheets.DaftarGaji ?? []).entries()) {
@@ -144,6 +144,12 @@ test.describe("Payroll RIMBUN SIBURIAN (Tambah & Edit)", () => {
       else await p.edit(c);
     });
   }
+
+  test("[Benefit Overtime] Import - Overtime_Benefit_Template.xlsx", async ({ page }) => {
+    const p = new OvertimePage(page);
+    await p.goto();
+    await p.importOvertime(path.resolve(import.meta.dirname, "data", "Overtime_Benefit_Template.xlsx"));
+  });
 
   for (const [idx, row] of (sheets.Pulsa ?? []).entries()) {
     const c = toPulsa(row);
