@@ -60,6 +60,7 @@ export class NonRegularGaji13Page {
   }
 
   async edit(data: Gaji13Case): Promise<void> {
+    await this.search(data.employee);
     const row = this.page.locator("tbody tr", { hasText: data.employee }).first();
     await expect(row).toBeVisible({ timeout: 60_000 });
     await clickRowEdit(this.page, data.employee);
@@ -102,7 +103,13 @@ export class NonRegularGaji13Page {
     await expect(this.dialog).toBeHidden({ timeout: 120_000 });
   }
 
+  /** Cari berdasarkan nama di kotak Search tabel. */
+  private async search(name: string): Promise<void> {
+    await this.page.getByPlaceholder("Search...").fill(name);
+  }
+
   private async verifyRow(data: Gaji13Case): Promise<void> {
+    await this.search(data.employee);
     const row = this.page.locator("tbody tr", { hasText: data.employee }).first();
     await expect(row).toBeVisible({ timeout: 30_000 });
     await expect(row).toContainText(formatUSD(Number(data.totalExpected)));

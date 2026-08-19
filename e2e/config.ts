@@ -18,7 +18,7 @@ export const UI_BASE_URL = "https://telkomcel-s1.lumoshive.net"; // frontend Vit
 
 // true  = hapus data payroll RIMBUN SIBURIAN sebelum test (agar test idempotent)
 // false = biarkan data yang sudah ada (berguna saat ingin test data existing)
-export const CLEANUP_BEFORE_TEST = false;
+export const CLEANUP_BEFORE_TEST = true;
 
 // Mode hapus data: "api" = via REST API (Laravel), "sql" = langsung via query SQL (database).
 // Ganti ke "sql" kalau mau cleanup hanya dari database.
