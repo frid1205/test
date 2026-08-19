@@ -2,5 +2,5 @@ node_modules/
 test-results/
 e2e-results/
 e2e/.auth/
-e2e/downloadedFile/
+e2e/downloadedFile/*
 e2e/config.ts
