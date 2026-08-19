@@ -68,13 +68,13 @@ test.describe.serial("Custom Benefit Setting", () => {
     await p.add(addCase);
   });
 
-  test(`[Custom Benefit] edit - ${editCase.editTitle}`, async ({ page }) => {
+  test(`[Custom Benefit] edit - ${editCase.title}`, async ({ page }) => {
     const p = new CustomBenefitSettingPage(page);
     await p.goto();
     await p.edit(editCase);
   });
 
-  test(`[Custom Benefit] tab "${editCase.editTitle}" muncul di Payroll - Master KKP - Benefit`, async ({ page }) => {
+  test(`[Custom Benefit] tab muncul di Payroll - Master KKP - Benefit`, async ({ page }) => {
     await page.goto("/benefit");
     await expect(page.getByRole("tab", { name: editCase.editTitle })).toBeVisible({ timeout: 60_000 });
   });

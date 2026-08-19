@@ -8,6 +8,7 @@ import { OvertimePage, type OvertimeCase } from "./pages/OvertimePage";
 import { PulsaPage, type PulsaCase } from "./pages/PulsaPage";
 import { MedicalPage, type MedicalCase } from "./pages/MedicalPage";
 import { OtherProratePage, type OtherProrateCase, type ProrateCase } from "./pages/OtherProratePage";
+import { CustomBenefitEntryPage, type BenefitEntryCase } from "./pages/CustomBenefitEntryPage";
 import { apiLogin, deleteProrateOthersForEmployee, ensureEmployeeRegulerThp, type PayrollApiConfig } from "./helpers/api";
 import { API_BASE_URL } from "./config";
 
@@ -127,6 +128,19 @@ function toProrate(row: ExcelRow): ProrateCase {
   };
 }
 
+function toBenefitEntry(row: ExcelRow): BenefitEntryCase {
+  return {
+    id: row.id,
+    action: s(row.action),
+    employee: s(row.employee),
+    period: s(row.period),
+    salary: s(row.salary),
+    amount: s(row.amount),
+    date: s(row.date),
+    note: s(row.note),
+  };
+}
+
 
 
 const sheets = readAllSheets(DATA_FILE);
@@ -224,4 +238,24 @@ test.describe("Master KKP", () => {
       else await p.editProrate(c);
     });
   }
+
+  for (const [idx, row] of (sheets["Benefit Others"] ?? []).entries()) {
+    const c = toBenefitEntry(row);
+    test(`[Benefit Others] ${c.action} - ${c.employee} ${c.period} (#${idx + 1})`, async ({ page }) => {
+      if (c.action.toLowerCase() === "add") {
+        const { token } = await apiLogin(API_CFG);
+        await ensureEmployeeRegulerThp(API_CFG, token, c.employee);
+      }
+      const p = new CustomBenefitEntryPage(page);
+      await p.goto();
+      if (c.action.toLowerCase() === "add") await p.add(c);
+      else if (c.action.toLowerCase() === "edit") await p.edit(c);
+      else await p.delete(c);
+    });
+  }
+
+  test("Tab 'Benefit Others' muncul di Payroll - Master KKP - Benefit", async ({ page }) => {
+    await page.goto("/benefit");
+    await expect(page.getByRole("tab", { name: "Benefit Others" })).toBeVisible({ timeout: 60_000 });
+  });
 });
