@@ -13,6 +13,8 @@ export interface BfkjCase {
 const formatUSD = (v: number) =>
   "$" + v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+const MONTH_HEADERS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export class NonRegularBfkjPage {
   private readonly dialog: Locator;
 
@@ -60,10 +62,25 @@ export class NonRegularBfkjPage {
     const row = this.page.locator("tbody tr", { hasText: data.employee }).first();
     await expect(row).toBeVisible({ timeout: 60_000 });
     await clickRowEdit(this.page, data.employee);
-    const monthIdx = Number(data.period.slice(5, 7)) - 1;
-    await row.locator("input").nth(monthIdx).fill(String(data.amount));
+    const input = await this.monthCellInput(row, data.period);
+    await input.fill(String(data.amount));
+    await input.press("Tab");
+    await expect(input).toHaveValue(String(data.amount));
     await this.submitRow(row, "Submit", "/non-regular-salary-bfkj/bulk-store");
     await this.verifyRow(data);
+  }
+
+  /** Cari input cell bulan berdasarkan nama header kolom (bukan index). */
+  private async monthCellInput(row: Locator, period: string): Promise<Locator> {
+    const month = Number(period.slice(5, 7));
+    const header = this.page
+      .getByRole("columnheader", { name: new RegExp(`^${MONTH_HEADERS[month - 1]}$`) })
+      .first();
+    await expect(header).toBeVisible({ timeout: 30_000 });
+    const columnIndex = await header.evaluate((el) =>
+      Array.prototype.indexOf.call(el.parentElement?.children, el),
+    );
+    return row.locator("td").nth(columnIndex).locator("input");
   }
 
   /** Filter tahun di tabel (default tahun berjalan). */
