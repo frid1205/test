@@ -3,6 +3,7 @@ import { runSqlCleanup } from "./helpers/db";
 import { API_BASE_URL, CLEANUP_BEFORE_TEST, CLEANUP_MODE, UI_BASE_URL } from "./config";
 import fs from "node:fs";
 import path from "node:path";
+import readline from "node:readline";
 
 const cfg: PayrollApiConfig = {
   baseUrl: API_BASE_URL,
@@ -10,11 +11,29 @@ const cfg: PayrollApiConfig = {
   password: "PasswordSuperAdmin@Tecel67",
 };
 
+function askConfirmation(question: string): Promise<string> {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise((resolve) => {
+    rl.question(question, (answer) => {
+      rl.close();
+      resolve(answer.trim().toLowerCase());
+    });
+  });
+}
+
 export default async function globalSetup(): Promise<void> {
   console.log("[globalSetup] login API...");
   const { token, user, profile } = await apiLogin(cfg);
 
   if (CLEANUP_BEFORE_TEST) {
+    const answer = await askConfirmation(
+      "[globalSetup] CLEANUP_BEFORE_TEST=true - hapus data test sebelum test? (y/N): ",
+    );
+    if (answer !== "y" && answer !== "yes") {
+      console.log("[globalSetup] Cleanup dibatalkan. Test dihentikan.");
+      process.exit(1);
+    }
+
     if (CLEANUP_MODE === "sql") {
       console.log("[globalSetup] cleanup data via SQL (database)...");
       await runSqlCleanup();
