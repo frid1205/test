@@ -1,5 +1,5 @@
 import { type Locator, type Page, expect } from "@playwright/test";
-import { MONTH_NAMES_ID, chooseCombobox, clickRowEdit, pickMonth } from "../helpers/ui";
+import { MONTH_NAMES_ID, chooseCombobox, chooseSelect, clickRowEdit, pickMonth } from "../helpers/ui";
 
 export interface BfkjCase {
   id: string | number;
@@ -55,6 +55,8 @@ export class NonRegularBfkjPage {
   }
 
   async edit(data: BfkjCase): Promise<void> {
+    await this.setYearFilter(data.period.slice(0, 4));
+    await this.search(data.employee);
     const row = this.page.locator("tbody tr", { hasText: data.employee }).first();
     await expect(row).toBeVisible({ timeout: 60_000 });
     await clickRowEdit(this.page, data.employee);
@@ -62,6 +64,16 @@ export class NonRegularBfkjPage {
     await row.locator("input").nth(monthIdx).fill(String(data.amount));
     await this.submitRow(row, "Submit", "/non-regular-salary-bfkj/bulk-store");
     await this.verifyRow(data);
+  }
+
+  /** Filter tahun di tabel (default tahun berjalan). */
+  private async setYearFilter(year: string): Promise<void> {
+    await chooseSelect(this.page, this.page.getByRole("combobox").first(), year);
+  }
+
+  /** Cari berdasarkan nama di kotak Search tabel. */
+  private async search(name: string): Promise<void> {
+    await this.page.getByPlaceholder("Search...").fill(name);
   }
 
   async delete(data: BfkjCase): Promise<void> {
@@ -110,6 +122,8 @@ export class NonRegularBfkjPage {
   }
 
   private async verifyRow(data: BfkjCase): Promise<void> {
+    await this.setYearFilter(data.period.slice(0, 4));
+    await this.search(data.employee);
     const row = this.page.locator("tbody tr", { hasText: data.employee }).first();
     await expect(row).toBeVisible({ timeout: 30_000 });
     await expect(row).toContainText(formatUSD(Number(data.totalExpected)));
