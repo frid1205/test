@@ -1,5 +1,6 @@
 import path from "node:path";
 import { readSheet } from "./excel-reader";
+import { getRegulerThpBaseline } from "./reguler-thp-data";
 
 export interface PayrollApiConfig {
   baseUrl: string;
@@ -346,13 +347,36 @@ export async function cleanupTestPayrollData(cfg: PayrollApiConfig, token: strin
 }
 
 /**
- * Pastikan karyawan memiliki daftar gaji (THP reguler) di server dengan nilai
- * baseline (basic=500, total=500). Dipakai agar form non-regular (CUTAH, BFKJ,
- * dst.) mengisi Salary otomatis = 500 sehingga totalExpected di data Excel valid.
- * Jika THP sudah ada, nilainya di-reset ke baseline (suite payroll yang jalan
- * duluan bisa mengubah total THP karyawan uji yang sama).
- */export async function ensureEmployeeRegulerThp(cfg: PayrollApiConfig, token: string, name: string, category: string = "Local"): Promise<void> {
+ * Pastikan karyawan punya daftar gaji (THP reguler) di server sesuai sheet
+ * "DaftarGaji" di test-data.xlsx -- bukan nilai hardcoded. Dipakai suite
+ * non-regular / prorate / benefit others / salary deduction supaya field Salary
+ * yang auto-fill dari THP memakai angka yang sama dengan data Excel.
+ * Kalau THP sudah ada, nilainya di-reset ke nilai Excel (suite payroll yang
+ * jalan duluan bisa mengubahnya).
+ */
+export async function ensureEmployeeRegulerThp(cfg: PayrollApiConfig, token: string, name: string, category?: string): Promise<void> {
   const authHeaders = { Authorization: `Bearer ${token}` };
+  const baseline = getRegulerThpBaseline(name);
+
+  if (category && baseline.category && category !== baseline.category) {
+    console.warn(
+      `[ensureEmployeeRegulerThp] category "${category}" dari sheet pemanggil beda dengan sheet DaftarGaji ` +
+        `("${baseline.category}") untuk "${name}" -- memakai "${category}" karena halaman uji memfilter per category.`,
+    );
+  }
+
+  const payload = {
+    category: category ?? baseline.category,
+    basic: baseline.basic,
+    position: baseline.position,
+    expat: baseline.expat,
+    home: baseline.home,
+    hotskill: baseline.hotskill,
+    total: baseline.total,
+  };
+  const summary =
+    `category=${payload.category} basic=${payload.basic} position=${payload.position} ` +
+    `expat=${payload.expat} home=${payload.home} hotskill=${payload.hotskill} total=${payload.total}`;
 
   const listRes = await fetch(
     `${cfg.baseUrl}/api/master-reguler-thp?search=${encodeURIComponent(name)}&per_page=200`,
@@ -367,22 +391,12 @@ export async function cleanupTestPayrollData(cfg: PayrollApiConfig, token: strin
     const resetRes = await fetch(`${cfg.baseUrl}/api/master-reguler-thp/store`, {
       method: "POST",
       headers: { ...authHeaders, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uuid: record.uuid,
-        employee_uuid: record.employee_uuid,
-        category: category,
-        basic: "500",
-        position: "1",
-        expat: "1",
-        home: "1",
-        hotskill: "1",
-        total: "500",
-      }),
+      body: JSON.stringify({ uuid: record.uuid, employee_uuid: record.employee_uuid, ...payload }),
     });
     if (!resetRes.ok) {
       throw new Error(`ensureEmployeeRegulerThp: reset failed: ${resetRes.status} ${await resetRes.text()}`);
     }
-    console.log(`[ensureEmployeeRegulerThp] THP di-reset ke baseline untuk "${name}"`);
+    console.log(`[ensureEmployeeRegulerThp] THP "${name}" di-set dari sheet DaftarGaji -> ${summary}`);
     return;
   }
 
@@ -405,21 +419,12 @@ export async function cleanupTestPayrollData(cfg: PayrollApiConfig, token: strin
   const storeRes = await fetch(`${cfg.baseUrl}/api/master-reguler-thp/store`, {
     method: "POST",
     headers: { ...authHeaders, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      employee_uuid: emp.uuid,
-      category: category,
-      basic: "500",
-      position: "1",
-      expat: "1",
-      home: "1",
-      hotskill: "1",
-      total: "500",
-    }),
+    body: JSON.stringify({ employee_uuid: emp.uuid, ...payload }),
   });
   if (!storeRes.ok) {
     throw new Error(`ensureEmployeeRegulerThp: store failed: ${storeRes.status} ${await storeRes.text()}`);
   }
-  console.log(`[ensureEmployeeRegulerThp] THP created untuk "${name}"`);
+  console.log(`[ensureEmployeeRegulerThp] THP "${name}" dibuat dari sheet DaftarGaji -> ${summary}`);
 }
 
 /**

@@ -11,9 +11,11 @@ import { OtherProratePage, type OtherProrateCase, type ProrateCase } from "./pag
 import { CustomBenefitEntryPage, type BenefitEntryCase } from "./pages/CustomBenefitEntryPage";
 import { apiLogin, deleteProrateOthersForEmployee, ensureEmployeeRegulerThp, type PayrollApiConfig } from "./helpers/api";
 import { API_BASE_URL } from "./config";
+import { customBenefitTabName } from "./helpers/custom-benefit-data";
 
 const DATA_FILE = path.resolve(import.meta.dirname, "data", "test-data.xlsx");
 const STORAGE_STATE = path.resolve(import.meta.dirname, ".auth", "user.json");
+const CUSTOM_BENEFIT_TAB = customBenefitTabName();
 
 const API_CFG: PayrollApiConfig = {
   baseUrl: API_BASE_URL,
@@ -254,8 +256,8 @@ test.describe("Master KKP", () => {
     });
   }
 
-  test("Tab 'Benefit Others' muncul di Payroll - Master KKP - Benefit", async ({ page }) => {
+  test(`Tab '${CUSTOM_BENEFIT_TAB}' muncul di Payroll - Master KKP - Benefit`, async ({ page }) => {
     await page.goto("/benefit");
-    await expect(page.getByRole("tab", { name: "Benefit Others" })).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByRole("tab", { name: CUSTOM_BENEFIT_TAB })).toBeVisible({ timeout: 60_000 });
   });
 });

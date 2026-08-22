@@ -109,11 +109,16 @@ export class CustomBenefitSettingPage {
     // title tetap bisa diubah
     await expect(this.field("Title").locator("input")).toBeEnabled();
 
-    // struktur field terkunci: label/type/default value disabled
-    await expect(this.dialog.locator("li").nth(1).locator("input").nth(0)).toBeDisabled();
-    await expect(this.dialog.locator("li").nth(1).locator("[role=combobox]").nth(1)).toBeDisabled();
-    // formula terkunci
-    await expect(this.dialog.getByRole("button", { name: "*", exact: true })).toBeDisabled();
+    // Struktur field & formula terkunci HANYA kalau komponen sudah punya entry
+    // (CustomBenefitSettingForm.tsx:43 -> structureLocked = mode === "edit" &&
+    // has_entries, dan has_entries dari CustomBenefitController.php:68).
+    // Test `add` di atas menghapus lalu membuat ulang komponennya, jadi di titik
+    // ini entry-nya masih kosong dan strukturnya memang belum terkunci. Entry
+    // baru dibuat spec 03 ([Benefit Others] Add).
+    const fieldRow = this.dialog.locator("li").nth(1);
+    await expect(fieldRow.locator("input").first()).toBeEnabled();
+    await expect(fieldRow.locator("[role=combobox]").nth(1)).toBeEnabled();
+    await expect(this.dialog.getByRole("button", { name: "*", exact: true })).toBeEnabled();
 
     await this.field("Title").locator("input").fill(data.editTitle);
     await this.dialog.locator("li").nth(data.editMandatoryField).locator("input[type=checkbox]").nth(0).setChecked(true);

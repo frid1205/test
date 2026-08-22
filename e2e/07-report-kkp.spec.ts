@@ -72,14 +72,27 @@ test.describe("Report KKP", () => {
       await p.generate(c);
 
       if (c.reportType === "Report Reguler") {
-        const items = await getPayrollReportsByPeriodApi(API_CFG, token, c.period);
-        const subs = items.filter((i) => REGULAR_REPORT_TYPES.has(i.report_type));
-        expect(subs.length).toBeGreaterThan(0);
-        for (const item of subs) {
+        const initial = await getPayrollReportsByPeriodApi(API_CFG, token, c.period);
+        const types = initial.filter((i) => REGULAR_REPORT_TYPES.has(i.report_type)).map((i) => i.report_type);
+        expect(types.length).toBeGreaterThan(0);
+
+        for (const reportType of types) {
+          // Setiap review mengubah state server, dan baris sub-report bisa
+          // hilang di tengah run. Baca ulang daftarnya supaya kegagalan seperti
+          // itu langsung terbaca, bukan jadi timeout locator 30 detik.
+          const current = await getPayrollReportsByPeriodApi(API_CFG, token, c.period);
+          const item = current.find((i) => i.report_type === reportType);
+          expect(
+            item,
+            `Sub-report "${reportType}" hilang dari /payroll-reports/by-period/${c.period} ` +
+              `di tengah run (sisa ${current.length} dari ${initial.length} report). ` +
+              `Kemungkinan generate-nya gagal -- cek response 500 "Data is empty".`,
+          ).toBeTruthy();
+
           await p.openPeriodDetail();
-          await p.openReportDetail(item.report_type);
+          await p.openReportDetail(reportType);
           await p.review(REVIEW_REASON);
-          const filePath = path.join(DOWNLOAD_DIR, `sub_${sanitize(item.report_type, item.interval || "")}`);
+          const filePath = path.join(DOWNLOAD_DIR, `sub_${sanitize(reportType, item!.interval || "")}`);
           await p.downloadExcel(filePath);
           assertExcelFile(filePath);
         }

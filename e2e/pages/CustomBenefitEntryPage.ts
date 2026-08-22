@@ -1,5 +1,6 @@
 import { type Locator, type Page, expect } from "@playwright/test";
 import { MONTH_NAMES_ID, chooseCombobox, formField, pickDate, pickMonth } from "../helpers/ui";
+import { customBenefitTabName } from "../helpers/custom-benefit-data";
 
 export interface BenefitEntryCase {
   id: string | number;
@@ -23,7 +24,7 @@ export class CustomBenefitEntryPage {
 
   async goto(): Promise<void> {
     await this.page.goto("/benefit");
-    await this.page.getByRole("tab", { name: "Benefit Others" }).click();
+    await this.page.getByRole("tab", { name: customBenefitTabName() }).click();
     await expect(this.page.getByRole("button", { name: /Add Data/ })).toBeVisible({ timeout: 60_000 });
   }
 
@@ -60,7 +61,20 @@ export class CustomBenefitEntryPage {
       data.employee,
       "/employee-personal-info/employee-list",
     );
-    await expect(this.field("Salary").locator("input")).toHaveValue(/500/, { timeout: 30_000 });
+    // Field Salary auto-fill dari Master Reguler THP. Nilai harapannya diambil
+    // dari kolom "salary" sheet "Benefit Others", yang harus sama dengan total
+    // THP karyawan tsb di sheet "DaftarGaji".
+    const salaryInput = this.field("Salary").locator("input");
+    await expect(salaryInput).toHaveValue(/\d/, { timeout: 30_000 });
+    await expect
+      .poll(async () => Number((await salaryInput.inputValue()).replace(/[^0-9.]/g, "")), {
+        timeout: 15_000,
+        message:
+          `Salary auto-fill untuk "${data.employee}" tidak sama dengan kolom "salary" di sheet ` +
+          `"Benefit Others" (${data.salary}). Nilai itu berasal dari total THP di sheet "DaftarGaji" -- ` +
+          `samakan salah satunya.`,
+      })
+      .toBe(Number(data.salary));
     const [year, month] = data.period.split("-");
     await pickMonth(this.page, this.field("Period").locator("button").first(), MONTH_NAMES_ID[Number(month) - 1], year);
     await this.field("Amount").locator("input").fill(String(data.amount));

@@ -1,51 +1,23 @@
-tolong buatkan test automation script untuk module custom benefit setting, format bisa cek pada payroll.spec.ts
-terdapat test data juga untuk custom benefit ini.
-untuk url bisa di akses di /custom-benefit-setting 
-buatkan test custom benefit add dan edit, dengan nama "Benefit lain - lain"
-sort order ke-5,
-status active, 
-description bisa isi lorem ipsum 500 karakter,
-Klik tombol custom field kemudian isi  : 
- - Type field "Salary"
- - Label "Salary" (klo type field salary label, field type, dan default value disable)
- - Field Type "Currency"
- - Default Value "0"
- - Mandatory = true
- - Show On table = True
-klik Tombol custom field kemudian isi :
- - Type field "Custom Field"
- - Label "Amount"
- - Field Type "Number"
- - Default Value "0"
- - Mandatory = true
- - Show On table = True
-klik Tombol custom field kemudian isi :
- - Type field "Custom Field"
- - Label "Date"
- - Field Type "Date"
- - Default Value ""
- - Mandatory = false
- - Show On table = false
-klik Tombol custom field kemudian isi :
- - Type field "Custom Field"
- - Label "Note"
- - Field Type "Text"
- - Default Value ""
- - Mandatory = false
- - Show On table = true
+tolong buatkan test automation script untuk input entries custom benefit dengan nama "Benefit Others", 
+terdapat test data juga untuk "Benefit Others" ini, dalam excel bisa di cek pada test-data.xlsx gantikan dengan sheet Others (ganti namanya menjadi "Benefit Others").
+untuk url bisa di akses di /benefit kemudian klik tab dengan nama label "Benefit Others"
+buatkan test custom benefit add, edit dan delete.
+Klik tombol "+ Add Data" untuk membuka form add 
+isi data berikut :
+Employee pilih "Rimbun Siburian"
+periode January 2026
+Salary ubah menjadi 500
+Amount input 0.25
+Date input 12 January 2026
+Note : Catatan January rimbun siburian 
+kemudian klik save
 
-untuk formula nya adalah salary (bukan basic salary) * amount
-klik tombol add untuk simpan.
+verifikasi data sudah ditambahkan dengan cari namanya terlebih dahulu baru verifikasi
 
-untuk edit buka form edit, verifikasi custom field - custom field yang sudah ditambahkan tidak bisa diubah, formula pun tidak bisa diubah, yang bisa diubah hanya checkbox mandatory, checlbox show on table
-untuk perubahan data 
-name ubah menjadi "Benefit Others"
-klik Tombol custom field kemudian isi :
- - Type field "Custom Field"
- - Label "Date"
- - Field Type "Date"
- - Default Value ""
- - Mandatory = true => ini yang diubah
- - Show On table = false
+Edit data
+ubah amount menjadi 0.45
+kemudian klik save
+
+gunakan datadriven masukan test data dalam excel test-data.xlsx (gantikan dengan sheet Others (ganti namanya menjadi "Benefit Others"))
 
 kemudian cek pada payroll - master kkp - benefit - tab "Benefit others" muncul atau tidak

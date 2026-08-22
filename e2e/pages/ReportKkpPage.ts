@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import { type Locator, type Page, type Response, expect } from "@playwright/test";
 import { MONTH_NAMES_ID, pickMonth } from "../helpers/ui";
 
 export interface ReportKkpCase {
@@ -111,19 +111,40 @@ export class ReportKkpPage {
       await this.selectOption(intervalTrigger, this.intervalLabel(data.interval));
     }
 
-    // Report Reguler memicu beberapa POST /payroll-reports/generate (satu per
-    // sub-report). Tunggu response pertama lalu tutup dialog setelah semua selesai.
-    const responsePromise = this.page.waitForResponse(
-      (r) => r.url().includes("/payroll-reports/generate") && r.request().method() === "POST",
-      { timeout: 120_000 },
-    );
-    await this.dialog.getByRole("button", { name: "Generate", exact: true }).click();
-    const response = await responsePromise;
-    if (!response.ok()) {
-      throw new Error(`POST /payroll-reports/generate -> ${response.status()}: ${await response.text()}`);
+    // Report Reguler memicu banyak POST /payroll-reports/generate (satu per
+    // sub-report). Kumpulkan SEMUA response -- menunggu response pertama saja
+    // membuat kegagalan sub-report lain (mis. 500 "Data is empty") tidak
+    // terlihat, dan baru muncul jauh kemudian sebagai timeout locator.
+    const failures: string[] = [];
+    const pending: Array<Promise<void>> = [];
+    const onResponse = (r: Response): void => {
+      if (r.request().method() !== "POST" || !r.url().includes("/payroll-reports/generate")) return;
+      if (r.ok()) return;
+      pending.push(
+        r
+          .text()
+          .catch(() => "")
+          .then((body) => {
+            failures.push(`${r.status()} ${body}`);
+          }),
+      );
+    };
+
+    this.page.on("response", onResponse);
+    try {
+      await this.dialog.getByRole("button", { name: "Generate", exact: true }).click();
+      await expect(this.dialog).toBeHidden({ timeout: 120_000 });
+    } finally {
+      this.page.off("response", onResponse);
     }
-    await expect(this.dialog).toBeHidden({ timeout: 120_000 });
+    await Promise.all(pending);
+
+    expect(
+      failures,
+      `${failures.length} POST /payroll-reports/generate gagal:\n${failures.join("\n")}`,
+    ).toEqual([]);
   }
+
 
   /** Buka halaman period-detail via list di /report-master (klik baris periode). */
   async openPeriodDetail(): Promise<void> {
