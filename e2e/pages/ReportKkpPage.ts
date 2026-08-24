@@ -65,6 +65,19 @@ const GROUP_BY_TYPE: Record<string, string> = {
   "Transfer": "Salary Payment",
 };
 
+/**
+ * Label group di tabel period-detail, mengikuti useReportGrouping.ts:
+ * 1. "Report KKP - <benefit>" -> digabung ke group "Benefit";
+ * 2. tipe bawaan -> GROUP_BY_TYPE (mirror GROUP_CONFIG.matches);
+ * 3. sisanya = custom non-regular dari non-regular-setting (mis. "tunjangan
+ *    jabatan 2") -> group "Non Regular Salary". Namanya data dinamis, jadi
+ *    memang tidak bisa dihardcode di GROUP_BY_TYPE.
+ */
+function groupLabelFor(reportType: string): string {
+  if (reportType.startsWith(CUSTOM_BENEFIT_REPORT_PREFIX)) return "Benefit";
+  return GROUP_BY_TYPE[reportType] ?? "Non Regular Salary";
+}
+
 /** Backend membalas 500 dengan pesan ini kalau sub-report tidak punya data untuk periode tsb. */
 const EMPTY_DATA_MESSAGE = /Data is empty\. Cannot generate report snapshot/;
 
@@ -237,12 +250,7 @@ export class ReportKkpPage {
 
   async openReportDetail(reportType: string): Promise<void> {
     const viewButton = this.page.getByRole("button", { name: `View ${reportType} report` }).first();
-    const groupLabel = reportType.startsWith(CUSTOM_BENEFIT_REPORT_PREFIX) ? "Benefit" : GROUP_BY_TYPE[reportType];
-    // Tanpa fallback diam-diam: mapping yang salah/hilang harus gagal seketika,
-    // bukan berubah jadi timeout locator 30 detik yang menyesatkan.
-    if (!groupLabel) {
-      throw new Error(`Group untuk "${reportType}" belum ada di GROUP_BY_TYPE -- sinkronkan dengan GROUP_CONFIG (useReportGrouping.ts)`);
-    }
+    const groupLabel = groupLabelFor(reportType);
 
     const groupRow = this.page.locator("tbody tr").filter({ hasText: groupLabel }).first();
     await expect(groupRow).toBeVisible({ timeout: 30_000 });
