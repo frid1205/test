@@ -118,7 +118,17 @@ export class RekapBayarPage {
     let done = 0;
     for (const step of steps) {
       const button = this.page.getByRole("button", { name: step.button }).first();
-      if (!(await button.isVisible().catch(() => false))) {
+      // Tombol approval baru dirender setelah fetch report_authorization selesai
+      // (detail-report.tsx:149 -> `!loading && isAuthorized`), yaitu SESUDAH tabel
+      // dan tombol "Export Excel" muncul. isVisible() tidak auto-wait, jadi probe
+      // langsung membaca DOM yang belum siap dan salah menyimpulkan "akun tidak
+      // berwenang". Pakai waitFor supaya menunggu dulu; hanya benar-benar habis
+      // waktunya kalau akunnya memang tidak berwenang untuk tahap ini.
+      const available = await button
+        .waitFor({ state: "visible", timeout: 30_000 })
+        .then(() => true)
+        .catch(() => false);
+      if (!available) {
         console.warn(`[rekap-bayar] tombol "${step.button}" tidak tersedia untuk akun ini -- tahap approval dilewati.`);
         continue;
       }
