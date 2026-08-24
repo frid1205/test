@@ -1,4 +1,4 @@
-import { type Locator, type Page, type Response, expect } from "@playwright/test";
+import { type Locator, type Page, type Request, type Response, expect } from "@playwright/test";
 import { MONTH_NAMES_ID, pickMonth } from "../helpers/ui";
 
 export interface ReportKkpCase {
@@ -122,8 +122,22 @@ export class ReportKkpPage {
   }
 
   async generate(data: ReportKkpCase): Promise<void> {
+    // Modal langsung memanggil GET /payroll-reports/check-empty untuk bulan
+    // berjalan saat dibuka, lalu sekali lagi setelah period diganti. Hasilnya
+    // (`emptyReports`) yang menentukan sub-report mana yang DIKIRIM saat
+    // "Report Reguler" di-generate (generateReportHelpers.ts:57). Kalau tombol
+    // Generate diklik sebelum check untuk period yang benar selesai, frontend
+    // memakai hasil period lama -- sebagian sub-report ter-skip dan tidak
+    // pernah terbentuk. Penunggu didaftarkan SEBELUM modal dibuka supaya
+    // response-nya tidak terlewat.
+    const emptyCheckDone = this.page.waitForResponse(
+      (r) => r.url().includes("/payroll-reports/check-empty") && r.url().includes(`period=${this.period}`),
+      { timeout: 60_000 },
+    );
+
     await this.openGenerateModal();
     await this.fillPeriod();
+    await emptyCheckDone;
     await this.selectOption(this.dialog.locator(`#${REPORT_TYPE_TRIGGER_ID}`), data.reportType);
 
     if (data.interval && data.reportType !== "Report Reguler") {
@@ -138,8 +152,20 @@ export class ReportKkpPage {
     // terlihat, dan baru muncul jauh kemudian sebagai timeout locator.
     const failures: string[] = [];
     const pending: Array<Promise<void>> = [];
+    const isGenerateRequest = (r: Request): boolean =>
+      r.method() === "POST" && r.url().includes("/payroll-reports/generate");
+
+    // Hitung request yang masih berjalan. Navigasi/refresh saat masih ada POST
+    // generate di udara akan membatalkannya -- report-nya tidak terbentuk.
+    let inFlight = 0;
+    const onRequest = (r: Request): void => {
+      if (isGenerateRequest(r)) inFlight += 1;
+    };
+    const onSettled = (r: Request): void => {
+      if (isGenerateRequest(r)) inFlight -= 1;
+    };
     const onResponse = (r: Response): void => {
-      if (r.request().method() !== "POST" || !r.url().includes("/payroll-reports/generate")) return;
+      if (!isGenerateRequest(r.request())) return;
       if (r.ok()) return;
       pending.push(
         r
@@ -151,11 +177,29 @@ export class ReportKkpPage {
       );
     };
 
+    this.page.on("request", onRequest);
+    this.page.on("requestfinished", onSettled);
+    this.page.on("requestfailed", onSettled);
     this.page.on("response", onResponse);
     try {
       await this.dialog.getByRole("button", { name: "Generate", exact: true }).click();
+      // Modal baru ditutup frontend setelah seluruh sub-report selesai dikirim
+      // (useGenerateReportModal.ts: handleClose() dipanggil sesudah await),
+      // jadi form yang hilang = tanda semua generate sudah dijalankan.
       await expect(this.dialog).toBeHidden({ timeout: 120_000 });
+      await expect(this.page.getByRole("dialog")).toHaveCount(0, { timeout: 30_000 });
+      // ...dan pastikan tidak ada POST generate yang masih menggantung sebelum
+      // pemanggil pindah halaman.
+      await expect
+        .poll(() => inFlight, {
+          timeout: 120_000,
+          message: "Masih ada POST /payroll-reports/generate berjalan saat form generate sudah tertutup",
+        })
+        .toBe(0);
     } finally {
+      this.page.off("request", onRequest);
+      this.page.off("requestfinished", onSettled);
+      this.page.off("requestfailed", onSettled);
       this.page.off("response", onResponse);
     }
     await Promise.all(pending);
