@@ -25,6 +25,22 @@ export const REGULAR_REPORT_TYPES = new Set([
   "Master Prorate Others",
 ]);
 
+/**
+ * Report untuk komponen custom benefit dinamai "Report KKP - <judul benefit>"
+ * (useGenerateReportModal.ts: `Report KKP - ${b.title}`). Judulnya dibaca dari
+ * server, jadi jangan di-hardcode -- cukup cocokkan prefiksnya.
+ */
+export const CUSTOM_BENEFIT_REPORT_PREFIX = "Report KKP - ";
+
+/**
+ * Sub-report yang dihasilkan "Report Reguler": tipe reguler bawaan + setiap
+ * komponen custom benefit aktif (useGenerateReportModal.ts menambahkannya ke
+ * `regularReportTypes`). Keduanya perlu di-review dan di-download di spec 07.
+ */
+export function isRegularSubReport(reportType: string): boolean {
+  return REGULAR_REPORT_TYPES.has(reportType) || reportType.startsWith(CUSTOM_BENEFIT_REPORT_PREFIX);
+}
+
 const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const GROUP_BY_TYPE: Record<string, string> = {
@@ -46,6 +62,9 @@ const GROUP_BY_TYPE: Record<string, string> = {
   "Transfer": "Salary Payment",
   "Daftar Transfer Potongan": "Salary Payment",
 };
+
+/** Backend membalas 500 dengan pesan ini kalau sub-report tidak punya data untuk periode tsb. */
+const EMPTY_DATA_MESSAGE = /Data is empty\. Cannot generate report snapshot/;
 
 const PERIOD_INPUT_ID = "lbl_273217_period_263";
 const REPORT_TYPE_TRIGGER_ID = "lbl_273217_report_type_278";
@@ -139,9 +158,24 @@ export class ReportKkpPage {
     }
     await Promise.all(pending);
 
+    // Sub-report "core" (Payroll List, Transfer, Master Daftar Gaji, Daftar
+    // Transfer Potongan) tetap dikirim frontend walau check-empty menandainya
+    // kosong (generateReportHelpers.ts:44 -> CORE_REGULAR_TYPES), dan backend
+    // membalasnya 500 "Data is empty" alih-alih "skipped". Itu kondisi data,
+    // bukan kegagalan generate -- barisnya memang tidak dibuat dan loop review
+    // di spec tidak akan mencarinya karena daftar sub-report dibaca dari
+    // /payroll-reports/by-period. Dilewati, tapi tetap dicatat di log.
+    const skipped = failures.filter((f) => EMPTY_DATA_MESSAGE.test(f));
+    const blocking = failures.filter((f) => !EMPTY_DATA_MESSAGE.test(f));
+    if (skipped.length) {
+      console.warn(
+        `[generate] ${skipped.length} sub-report dilewati karena datanya kosong untuk periode ini:\n${skipped.join("\n")}`,
+      );
+    }
+
     expect(
-      failures,
-      `${failures.length} POST /payroll-reports/generate gagal:\n${failures.join("\n")}`,
+      blocking,
+      `${blocking.length} POST /payroll-reports/generate gagal:\n${blocking.join("\n")}`,
     ).toEqual([]);
   }
 

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import path from "node:path";
 import fs from "node:fs";
 import { readAllSheets, type ExcelRow } from "./helpers/excel-reader";
-import { ReportKkpPage, REGULAR_REPORT_TYPES, type ReportKkpCase } from "./pages/ReportKkpPage";
+import { ReportKkpPage, isRegularSubReport, type ReportKkpCase } from "./pages/ReportKkpPage";
 import { apiLogin, cleanupReportKkpPeriod, getPayrollReportsByPeriodApi, type PayrollApiConfig } from "./helpers/api";
 import { API_BASE_URL } from "./config";
 
@@ -73,7 +73,15 @@ test.describe("Report KKP", () => {
 
       if (c.reportType === "Report Reguler") {
         const initial = await getPayrollReportsByPeriodApi(API_CFG, token, c.period);
-        const types = initial.filter((i) => REGULAR_REPORT_TYPES.has(i.report_type)).map((i) => i.report_type);
+        // Termasuk report custom benefit ("Report KKP - <judul>"), yang juga
+        // ikut dibuat "Report Reguler" -- sebelumnya ter-generate tapi tidak
+        // pernah di-review maupun di-download.
+        const types = initial.filter((i) => isRegularSubReport(i.report_type)).map((i) => i.report_type);
+        console.log(`[kkp] ${types.length} sub-report akan di-review + download: ${types.join(", ")}`);
+        const skippedTypes = initial.filter((i) => !isRegularSubReport(i.report_type)).map((i) => i.report_type);
+        if (skippedTypes.length) {
+          console.log(`[kkp] tidak termasuk cakupan Report Reguler: ${skippedTypes.join(", ")}`);
+        }
         expect(types.length).toBeGreaterThan(0);
 
         for (const reportType of types) {

@@ -660,6 +660,39 @@ async function deletePeriodRecords(
 }
 
 /**
+ * Hapus rekap bayar (payroll + payment receipt note) untuk satu periode saja,
+ * supaya spec rekap bayar idempotent tanpa ikut menghapus payroll-report dan
+ * jurnal memo -- keduanya justru prasyarat generate rekap bayar
+ * (PayrollValidationService::validatePayrollPrerequisites).
+ */
+export async function deleteRekapBayarForPeriod(
+  cfg: PayrollApiConfig,
+  token: string,
+  period: string,
+): Promise<{ payrolls: number; paymentReceiptNotes: number }> {
+  const payrolls = await deletePeriodRecords(
+    token, cfg,
+    `/generate-payroll?period=${period}`,
+    (r) => `/generate-payroll/delete/${r.uuid}`,
+    "generate-payroll",
+    (body) => {
+      const nested = (body as { data?: { data?: unknown } })?.data?.data;
+      if (Array.isArray(nested)) return nested;
+      const data = (body as { data?: unknown })?.data;
+      return Array.isArray(data) ? data : [];
+    },
+  );
+  const paymentReceiptNotes = await deletePeriodRecords(
+    token, cfg,
+    `/payment-receipt-notes?period=${period}`,
+    (r) => `/payment-receipt-notes/delete/${r.uuid}`,
+    "payment-receipt-note",
+  );
+  console.log(`[cleanup] rekap bayar period ${period}: ${JSON.stringify({ payrolls, paymentReceiptNotes })} record(s) deleted`);
+  return { payrolls, paymentReceiptNotes };
+}
+
+/**
  * Bersihkan semua artefak periode Report KKP agar test rerun idempotent:
  * payroll-report (aktif + arsip), jurnal memo (/generate-moju), rekap bayar
  * (/payment-receipt-notes), dan payroll/payslip (/generate-payroll).
