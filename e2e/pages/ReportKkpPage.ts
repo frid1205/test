@@ -55,12 +55,14 @@ const GROUP_BY_TYPE: Record<string, string> = {
   "Master Benefit Lembur": "Benefit",
   "Master Potongan Homestaff": "Salary Deduction",
   "Master Potongan Expat Local": "Salary Deduction",
+  // useReportGrouping.ts GROUP_CONFIG menempatkannya di "Salary Deduction",
+  // bukan "Salary Payment" -- salah group berarti barisnya tidak pernah ter-expand.
+  "Daftar Transfer Potongan": "Salary Deduction",
   "Master Prorate": "Other & Prorate",
   "Master Prorate Others": "Other & Prorate",
   "Master Daftar Gaji": "Salary Payment",
   "Payroll List": "Salary Payment",
   "Transfer": "Salary Payment",
-  "Daftar Transfer Potongan": "Salary Payment",
 };
 
 /** Backend membalas 500 dengan pesan ini kalau sub-report tidak punya data untuk periode tsb. */
@@ -191,13 +193,24 @@ export class ReportKkpPage {
 
   async openReportDetail(reportType: string): Promise<void> {
     const viewButton = this.page.getByRole("button", { name: `View ${reportType} report` }).first();
-    const groupLabel = reportType.startsWith("Report KKP - ") ? "Benefit" : (GROUP_BY_TYPE[reportType] || "Non Regular Salary");
-    if (!(await viewButton.isVisible().catch(() => false))) {
-      const groupRow = this.page.locator("tbody tr").filter({ hasText: groupLabel }).first();
-      await expect(groupRow).toBeVisible({ timeout: 30_000 });
+    const groupLabel = reportType.startsWith(CUSTOM_BENEFIT_REPORT_PREFIX) ? "Benefit" : GROUP_BY_TYPE[reportType];
+    // Tanpa fallback diam-diam: mapping yang salah/hilang harus gagal seketika,
+    // bukan berubah jadi timeout locator 30 detik yang menyesatkan.
+    if (!groupLabel) {
+      throw new Error(`Group untuk "${reportType}" belum ada di GROUP_BY_TYPE -- sinkronkan dengan GROUP_CONFIG (useReportGrouping.ts)`);
+    }
+
+    const groupRow = this.page.locator("tbody tr").filter({ hasText: groupLabel }).first();
+    await expect(groupRow).toBeVisible({ timeout: 30_000 });
+    // Probe isVisible() baru dilakukan setelah tabel render, jadi hasilnya
+    // benar-benar menjawab "group ini sudah ter-expand?" dan bukan balapan.
+    if (!(await viewButton.isVisible())) {
       await groupRow.click();
     }
-    await expect(viewButton).toBeVisible({ timeout: 30_000 });
+    await expect(
+      viewButton,
+      `Baris "${reportType}" tidak muncul setelah group "${groupLabel}" di-expand`,
+    ).toBeVisible({ timeout: 30_000 });
     await viewButton.click();
     await expect(this.page.getByRole("button", { name: "Export Excel" }).first()).toBeVisible({ timeout: 60_000 });
   }
