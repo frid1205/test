@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import path from "node:path";
 import fs from "node:fs";
 import { readSheetRaw } from "./helpers/excel-reader";
-import { RekapBayarPage, type RekapBayarCase } from "./pages/RekapBayarPage";
+import { REKAP_BAYAR_REPORT_TYPES, RekapBayarPage, type RekapBayarCase } from "./pages/RekapBayarPage";
 import { apiLogin, deleteRekapBayarForPeriod, type PayrollApiConfig } from "./helpers/api";
 import { API_BASE_URL } from "./config";
 
@@ -79,12 +79,19 @@ test.describe("Rekap Bayar", () => {
       await p.goto();
       await p.generate(c);
 
-      await p.openReportDetail(c);
-      await p.approve(c.approveNote);
+      // Satu periode menghasilkan 3 report dengan status approval sendiri-sendiri
+      // (Rekap Pembayaran, Bayar Gaji, Bukti Transfer) -- ketiganya di-approve
+      // dan di-download, bukan cuma yang ada di kolom reportType.
+      for (const reportType of REKAP_BAYAR_REPORT_TYPES) {
+        await test.step(reportType, async () => {
+          await p.openReportDetail(c, reportType);
+          await p.approve(c.approveNote);
 
-      const filePath = path.join(DOWNLOAD_DIR, `rekap_bayar_${sanitize(c.reportType)}_${c.paymentPeriod}.xlsx`);
-      await p.downloadExcel(filePath);
-      assertExcelFile(filePath);
+          const filePath = path.join(DOWNLOAD_DIR, `rekap_bayar_${sanitize(reportType)}_${c.paymentPeriod}.xlsx`);
+          await p.downloadExcel(filePath, reportType);
+          assertExcelFile(filePath);
+        });
+      }
     });
   }
 });

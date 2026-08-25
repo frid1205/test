@@ -12,6 +12,26 @@ export interface RekapBayarCase {
   nonRegular: Record<string, string>;
 }
 
+/**
+ * Satu periode rekap bayar punya 3 report dengan status approval masing-masing
+ * (detail-list.tsx -> details.rekap_pembayaran / salary_payment / payment_receipt),
+ * jadi ketiganya perlu di-review + di-approve + di-download terpisah.
+ */
+export const REKAP_BAYAR_REPORT_TYPES = ["Rekap Pembayaran", "Bayar Gaji", "Bukti Transfer"] as const;
+
+export type RekapBayarReportType = (typeof REKAP_BAYAR_REPORT_TYPES)[number];
+
+/** "Bukti Transfer" meng-export per bank di halaman detail, bukan di halaman report-nya. */
+const RECEIPT_REPORT: RekapBayarReportType = "Bukti Transfer";
+
+/**
+ * Label tombol export Excel beda per halaman: "Export Excel" di Rekap Pembayaran
+ * dan di detail Bukti Transfer, tapi "Export Data" di Bayar Gaji
+ * (salary-payment/page.tsx -> t("salaryPayment.exportButton")). Regex ini
+ * mencakup keduanya dan sengaja TIDAK cocok dengan "Export PDF".
+ */
+const EXPORT_EXCEL_BUTTON = /^Export (Excel|Data)$/;
+
 // Field id dari GeneratePayrollModal.tsx.
 const PAYMENT_DATE_ID = "lbl_79d0e5_paymentdate_181";
 const PAYMENT_PERIOD_ID = "lbl_79d0e5_paymentperiod_196";
@@ -90,17 +110,23 @@ export class RekapBayarPage {
   }
 
   /** Buka /rekap-bayar -> detail periode -> salah satu dari 3 report (Rekap Pembayaran / Bayar Gaji / Bukti Transfer). */
-  async openReportDetail(data: RekapBayarCase): Promise<void> {
+  async openReportDetail(data: RekapBayarCase, reportType: string = data.reportType): Promise<void> {
     await this.goto();
     const periodButton = this.page.getByRole("button", { name: `View details for ${data.paymentPeriod}` });
     await expect(periodButton).toBeVisible({ timeout: 60_000 });
     await periodButton.click();
 
-    const reportButton = this.page.getByRole("button", { name: `View details for ${data.reportType}` });
+    const reportButton = this.page.getByRole("button", { name: `View details for ${reportType}` });
     await expect(reportButton).toBeVisible({ timeout: 60_000 });
     await reportButton.click();
 
-    await expect(this.page.getByRole("button", { name: "Export Excel" }).first()).toBeVisible({ timeout: 60_000 });
+    // "Bukti Transfer" tidak punya tombol Export di halaman report-nya, jadi
+    // penanda "halaman siap" beda: tabel bank-nya yang ditunggu.
+    const ready =
+      reportType === RECEIPT_REPORT
+        ? this.page.getByRole("table").first()
+        : this.page.getByRole("button", { name: EXPORT_EXCEL_BUTTON }).first();
+    await expect(ready).toBeVisible({ timeout: 60_000 });
   }
 
   /**
@@ -116,18 +142,21 @@ export class RekapBayarPage {
     ];
 
     let done = 0;
+    // Probe pertama saja yang perlu sabar: saat halaman baru dibuka, fetch
+    // report_authorization masih jalan dan tombolnya belum dirender
+    // (detail-report.tsx:149 -> `!loading && isAuthorized`). Setelah satu tahap
+    // selesai, banner "Status Reviewed by HR" baru tampil SESUDAH fetchStatus()
+    // selesai -- artinya UI sudah re-render dan tombol tahap berikutnya pasti
+    // sudah ikut ada kalau akun ini memang berwenang. Menunggu lama di situ
+    // hanya membuang waktu.
+    let probeTimeout = 30_000;
     for (const step of steps) {
       const button = this.page.getByRole("button", { name: step.button }).first();
-      // Tombol approval baru dirender setelah fetch report_authorization selesai
-      // (detail-report.tsx:149 -> `!loading && isAuthorized`), yaitu SESUDAH tabel
-      // dan tombol "Export Excel" muncul. isVisible() tidak auto-wait, jadi probe
-      // langsung membaca DOM yang belum siap dan salah menyimpulkan "akun tidak
-      // berwenang". Pakai waitFor supaya menunggu dulu; hanya benar-benar habis
-      // waktunya kalau akunnya memang tidak berwenang untuk tahap ini.
       const available = await button
-        .waitFor({ state: "visible", timeout: 30_000 })
+        .waitFor({ state: "visible", timeout: probeTimeout })
         .then(() => true)
         .catch(() => false);
+      probeTimeout = 1_000;
       if (!available) {
         console.warn(`[rekap-bayar] tombol "${step.button}" tidak tersedia untuk akun ini -- tahap approval dilewati.`);
         continue;
@@ -157,9 +186,29 @@ export class RekapBayarPage {
     expect(done, "tidak ada satupun tahap approval yang bisa dijalankan").toBeGreaterThan(0);
   }
 
-  async downloadExcel(savePath: string): Promise<void> {
+  /**
+   * Excel "Bukti Transfer" di-generate per bank di /report/payment-receipt/detail
+   * (payment-receipt/part/detail/page.tsx), bukan di halaman report-nya. Buka
+   * baris bank pertama supaya tombol Export Excel-nya tersedia.
+   */
+  private async openFirstBankReceipt(): Promise<void> {
+    const row = this.page.locator("tbody tr").first();
+    await expect(row, 'report "Bukti Transfer" tidak punya baris bank untuk periode ini').toBeVisible({
+      timeout: 60_000,
+    });
+    // aria-label tombolnya ikut bahasa UI (paymentReceipt.view: View / Lihat).
+    await row.getByRole("button", { name: /^(View|Lihat)$/ }).first().click();
+    await expect(this.page.getByRole("button", { name: EXPORT_EXCEL_BUTTON }).first()).toBeVisible({
+      timeout: 60_000,
+    });
+  }
+
+  async downloadExcel(savePath: string, reportType = "Rekap Pembayaran"): Promise<void> {
+    if (reportType === RECEIPT_REPORT) {
+      await this.openFirstBankReceipt();
+    }
     const downloadPromise = this.page.waitForEvent("download", { timeout: 120_000 });
-    await this.page.getByRole("button", { name: "Export Excel", exact: true }).first().click();
+    await this.page.getByRole("button", { name: EXPORT_EXCEL_BUTTON }).first().click();
     const download = await downloadPromise;
     if (!download.suggestedFilename().toLowerCase().endsWith(".xlsx")) {
       throw new Error(`Unexpected download filename: ${download.suggestedFilename()}`);
