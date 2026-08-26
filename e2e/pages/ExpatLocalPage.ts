@@ -182,29 +182,78 @@ export class ExpatLocalPage {
     return new Date(`${period}-01`).toLocaleDateString("en-US", { year: "numeric", month: "long" });
   }
 
+  /**
+   * Index kolom diambil dari header, bukan di-hardcode: susunan kolom Expat Local
+   * berubah mengikuti filter Type dan jumlah custom deduction yang aktif.
+   */
+  private async columnIndex(label: string): Promise<number> {
+    const headers = (await this.page.locator("thead th").allInnerTexts()).map((h) => h.trim());
+    const index = headers.findIndex((h) => h.toLowerCase() === label.toLowerCase());
+    if (index < 0) {
+      throw new Error(`Kolom "${label}" tidak ditemukan. Header saat ini: ${headers.join(" | ")}`);
+    }
+    return index;
+  }
+
   private async searchRow(data: ExpatLocalCase, type?: string): Promise<Locator> {
     await this.setPeriodFilter(data.period, type);
+
+    const listed = this.page
+      .waitForResponse(
+        (r) => r.url().includes("/master-salary-deduction-expat-local") && r.request().method() === "GET",
+        { timeout: 30_000 },
+      )
+      .catch(() => undefined);
     const search = this.page.getByPlaceholder("Search...").first();
+    await search.fill("");
     await search.fill(data.employee);
-    let rows = this.page.locator("tbody tr", { hasText: data.employee });
-    if (data.period) {
-      rows = rows.filter({ hasText: this.periodLabel(data.period) });
-    }
-    const row = rows.first();
-    await expect(row).toBeVisible({ timeout: 30_000 });
-    return row;
+    await listed;
+
+    // Record "tanpa period" harus dibedakan dari record ber-period milik karyawan
+    // yang sama. Tanpa ini locator cocok ke semua record karyawan tsb dan .first()
+    // diam-diam memverifikasi baris yang salah. Kolom Period berisi "-" saat kosong.
+    const periodCol = await this.columnIndex("Period");
+    const periodCell = this.page.locator(`td:nth-child(${periodCol + 1})`, {
+      hasText: data.period ? this.periodLabel(data.period) : /^-$/,
+    });
+    const rows = this.page
+      .locator("tbody tr")
+      .filter({ hasText: data.employee })
+      .filter({ has: periodCell });
+
+    // Sengaja bukan .first(): kalau masih ada lebih dari satu kandidat (mis. data
+    // sisa run sebelumnya), test harus gagal dengan jelas, bukan memilih acak.
+    await expect(rows).toHaveCount(1, { timeout: 30_000 });
+    return rows.first();
+  }
+
+  /** Nilai satu sel pada baris, dipilih lewat nama kolom di header. */
+  private async cell(row: Locator, label: string): Promise<Locator> {
+    return row.locator("td").nth(await this.columnIndex(label));
   }
 
   private async verifyRow(data: ExpatLocalCase): Promise<void> {
+    // Assert per-sel (toHaveText), bukan toContainText di level <tr>: teks seluruh
+    // baris tergabung tanpa pemisah sehingga nilai kolom lain bisa ikut cocok.
     const row = await this.searchRow(data);
-    await expect(row).toContainText(`Rp ${Number(data.rate).toLocaleString("en-US")}`);
-    await expect(row).toContainText(`$${currencyFormat(data.employeeDeduction)}`);
-    await expect(row).toContainText(`$${currencyFormat(data.totalExpected)}`);
-    if (data.period) {
-      await expect(row).toContainText(this.periodLabel(data.period));
-    }
-    // Kolom employer contribution hanya tampil di view "Employer Contribution".
+    await expect(await this.cell(row, "Reference Rate")).toHaveText(
+      `Rp ${Number(data.rate).toLocaleString("en-US")}`,
+    );
+    await expect(await this.cell(row, "Employee Deduction")).toHaveText(
+      `$${currencyFormat(data.employeeDeduction)}`,
+    );
+    await expect(await this.cell(row, "Total Deduction")).toHaveText(
+      `$${currencyFormat(data.totalExpected)}`,
+    );
+    await expect(await this.cell(row, "Period")).toHaveText(
+      data.period ? this.periodLabel(data.period) : "-",
+    );
+
+    // Kolom employer contribution hanya tampil di view "Employer Contribution",
+    // dan susunan kolomnya berbeda sehingga index diresolusi ulang di sini.
     const empRow = await this.searchRow(data, "Employer Contribution");
-    await expect(empRow).toContainText(`$${currencyFormat(data.totalEmployerExpected)}`);
+    await expect(await this.cell(empRow, "Total Employer Contribution")).toHaveText(
+      `$${currencyFormat(data.totalEmployerExpected)}`,
+    );
   }
 }
