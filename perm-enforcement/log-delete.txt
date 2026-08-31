@@ -1,0 +1,46 @@
+[delete] set 88 permission untuk role Vice President ...
+[delete] dashboard                  add=0 edit=0 del=0 rows=5/api:- reads=2
+[delete] personal-information       add=0 edit=1 del=0 rows=0/api:- reads=2
+[delete] daftar-gaji                add=0 edit=0 del=8 rows=10/api:11 reads=2
+[delete] benefit                    add=0 edit=0 del=0 rows=0/api:6 reads=2 RELOADED FILTERED-EMPTY
+[delete] non-regular-salary         add=0 edit=0 del=6 rows=6/api:- reads=2
+[delete] homestaff                  add=0 edit=0 del=0 rows=0/api:0 reads=2
+[delete] expat-local                add=0 edit=0 del=0 rows=0/api:0 reads=2
+[delete] homestaff-company-fee      add=0 edit=0 del=3 rows=3/api:3 reads=2
+[delete] deduction-transfer         add=0 edit=0 del=0 rows=0/api:0 reads=2
+[delete] other-prorate              add=0 edit=0 del=0 rows=0/api:1 reads=2 RELOADED FILTERED-EMPTY
+[delete] report-kkp                 add=0 edit=0 del=0 rows=0/api:- reads=2
+[delete] journal-memo               add=0 edit=0 del=0 rows=0/api:141 reads=2 RELOADED FILTERED-EMPTY
+[delete] rekap-bayar                add=0 edit=0 del=2 rows=2/api:- reads=2
+[delete] payroll-approval-vp        add=0 edit=0 del=0 rows=0/api:- reads=2
+[delete] generate-payslip           add=0 edit=0 del=0 rows=2/api:- reads=2
+[delete] payslip                    add=0 edit=0 del=0 rows=0/api:- reads=2
+[delete] esk                        add=1 edit=0 del=0 rows=3/api:8 reads=2
+[delete] travel-management          add=0 edit=0 del=0 rows=10/api:33 reads=2
+[delete] log-data                   add=0 edit=0 del=0 rows=15/api:5 reads=2
+[delete] export-queue               add=0 edit=0 del=0 rows=2/api:- reads=2
+[delete] approval-management        add=0 edit=0 del=0 rows=10/api:- reads=2
+[delete] payroll-authorization      add=0 edit=0 del=8 rows=10/api:45 reads=2
+[delete] travel-requests            add=0 edit=0 del=0 rows=3/api:3 reads=2
+[delete] master-group               add=0 edit=0 del=4 rows=4/api:4 reads=2
+[delete] master-sub-group           add=0 edit=0 del=6 rows=6/api:6 reads=2
+[delete] master-department          add=0 edit=0 del=8 rows=8/api:8 reads=2
+[delete] master-sub-department      add=0 edit=0 del=8 rows=10/api:30 reads=2
+[delete] master-unit                add=0 edit=0 del=4 rows=4/api:4 reads=2
+[delete] master-sub-unit            add=0 edit=0 del=3 rows=3/api:3 reads=2
+[delete] master-position            add=0 edit=0 del=8 rows=10/api:159 reads=2
+[delete] master-personal-area       add=0 edit=0 del=8 rows=10/api:18 reads=2
+[delete] master-personal-sub-area   add=0 edit=0 del=8 rows=10/api:17 reads=2
+[delete] master-band-position       add=0 edit=0 del=6 rows=6/api:6 reads=2
+[delete] municipio                  add=0 edit=0 del=8 rows=10/api:15 reads=2
+[delete] reference-rate             add=0 edit=0 del=7 rows=7/api:7 reads=2
+[delete] document-reference-code    add=0 edit=0 del=0 rows=3/api:3 reads=2
+[delete] payment-method             add=0 edit=0 del=8 rows=8/api:8 reads=2
+[delete] non-regular-setting        add=0 edit=0 del=0 rows=10/api:15 reads=2
+[delete] custom-benefit-setting     add=0 edit=0 del=0 rows=5/api:5 reads=2
+[delete] custom-deduction-setting   add=0 edit=0 del=0 rows=10/api:19 reads=2
+[delete] employee-management        add=0 edit=0 del=8 rows=10/api:479 reads=2
+[delete] user-management            add=0 edit=0 del=8 rows=10/api:483 reads=2
+[delete] role-management            add=0 edit=0 del=8 rows=10/api:30 reads=2
+[delete] permission-list            add=1 edit=8 del=8 rows=10/api:53 reads=2
+[delete] selesai → result-ui-delete.json

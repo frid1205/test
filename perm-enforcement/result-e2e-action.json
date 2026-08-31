@@ -1,0 +1,53 @@
+{
+ "slug": "master-department",
+ "log": [
+  {
+   "step": "create-with-create-permission",
+   "addButtonVisible": true,
+   "httpStatus": 200,
+   "dataExistsAfter": true,
+   "ok": true,
+   "httpCalls": [
+    {
+     "method": "POST",
+     "url": "/api/api/master-departments/store",
+     "status": 200
+    }
+   ],
+   "evidence": "e2e-action-master-department/02-add-result.png"
+  },
+  {
+   "step": "update-with-update-permission",
+   "httpStatus": 403,
+   "dataRenamed": false,
+   "dataUnchanged": true,
+   "toastText": [
+    "Error Access denied. You do not have permission to perform this action."
+   ],
+   "errorShownToUser": true,
+   "ok": false,
+   "httpCalls": [
+    {
+     "method": "POST",
+     "url": "/api/api/master-departments/store",
+     "status": 403
+    }
+   ],
+   "evidence": "e2e-action-master-department/04-edit-result.png"
+  },
+  {
+   "step": "delete-with-delete-permission",
+   "httpStatus": 200,
+   "dataDeleted": true,
+   "ok": true,
+   "httpCalls": [
+    {
+     "method": "DELETE",
+     "url": "/api/api/master-departments/delete/0872d9a5-4725-4d85-b17f-d001084e82a0",
+     "status": 200
+    }
+   ],
+   "evidence": "e2e-action-master-department/06-after-delete.png"
+  }
+ ]
+}

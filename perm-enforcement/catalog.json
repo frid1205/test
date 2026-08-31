@@ -1,0 +1,310 @@
+[
+ {
+  "slug": "dashboard",
+  "name": "Dashboard",
+  "route": "/dashboard",
+  "module": "Dashboard",
+  "id": 215
+ },
+ {
+  "slug": "personal-information",
+  "name": "Personal Information",
+  "route": "/personal-information",
+  "module": "Personal Information",
+  "id": 1
+ },
+ {
+  "slug": "daftar-gaji",
+  "name": "Daftar Gaji",
+  "route": "/daftar-gaji",
+  "module": "Payroll > Master KKP 2",
+  "id": 8
+ },
+ {
+  "slug": "benefit",
+  "name": "Benefit",
+  "route": "/benefit",
+  "module": "Payroll > Master KKP 2",
+  "id": 13
+ },
+ {
+  "slug": "non-regular-salary",
+  "name": "Non Regular Salary",
+  "route": "/non-regular-salary",
+  "module": "Payroll > Master KKP 2",
+  "id": 18
+ },
+ {
+  "slug": "homestaff",
+  "name": "Homestaff",
+  "route": "/homestaff",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "id": 24
+ },
+ {
+  "slug": "expat-local",
+  "name": "Expat Local",
+  "route": "/expat-local",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "id": 29
+ },
+ {
+  "slug": "homestaff-company-fee",
+  "name": "Homestaff Company Fee",
+  "route": "/homestaff-company-fee",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "id": 34
+ },
+ {
+  "slug": "deduction-transfer",
+  "name": "Deduction Transfer",
+  "route": "/deduction-transfer",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "id": 164
+ },
+ {
+  "slug": "other-prorate",
+  "name": "Other & Prorate",
+  "route": "/other-&-prorate",
+  "module": "Payroll > Master KKP 2",
+  "id": 39
+ },
+ {
+  "slug": "report-kkp",
+  "name": "Report KKP",
+  "route": "/report-master",
+  "module": "Payroll > Journal & Report",
+  "id": 45
+ },
+ {
+  "slug": "journal-memo",
+  "name": "Journal Memo",
+  "route": "/jurnal-memo",
+  "module": "Payroll > Journal & Report",
+  "id": 50
+ },
+ {
+  "slug": "rekap-bayar",
+  "name": "Rekap Bayar",
+  "route": "/rekap-bayar",
+  "module": "Payroll > Journal & Report",
+  "id": 55
+ },
+ {
+  "slug": "payroll-approval-vp",
+  "name": "Payroll Approval VP",
+  "route": "/report-approval",
+  "module": "Payroll > Journal & Report",
+  "id": 60
+ },
+ {
+  "slug": "generate-payslip",
+  "name": "Generate Payslip",
+  "route": "/generate-payslip",
+  "module": "Payroll",
+  "id": 65
+ },
+ {
+  "slug": "payslip",
+  "name": "Payslip",
+  "route": "/payslip",
+  "module": "Payroll",
+  "id": 70
+ },
+ {
+  "slug": "esk",
+  "name": "eSK",
+  "route": "/e-sk",
+  "module": "eSK",
+  "id": 75
+ },
+ {
+  "slug": "travel-management",
+  "name": "Travel Management",
+  "route": "/travel-management",
+  "module": "Travel Management",
+  "id": 80
+ },
+ {
+  "slug": "log-data",
+  "name": "Log Data",
+  "route": "/audit-trail",
+  "module": "Audit Trail",
+  "id": 86
+ },
+ {
+  "slug": "export-queue",
+  "name": "Export Queue",
+  "route": "/export-queue",
+  "module": "Audit Trail",
+  "id": 91
+ },
+ {
+  "slug": "approval-management",
+  "name": "Approval Management",
+  "route": "/approval-management",
+  "module": "Setting > Approval Management",
+  "id": 98
+ },
+ {
+  "slug": "payroll-authorization",
+  "name": "Payroll Authorization",
+  "route": "/report-authorization",
+  "module": "Setting > Approval Management",
+  "id": 103
+ },
+ {
+  "slug": "travel-requests",
+  "name": "Travel Requests",
+  "route": "/approval-management/travel-requests",
+  "module": "Setting > Approval Management",
+  "id": 108
+ },
+ {
+  "slug": "master-group",
+  "name": "Master Group",
+  "route": "/master-group",
+  "module": "Setting > Master Data",
+  "id": 114
+ },
+ {
+  "slug": "master-sub-group",
+  "name": "Master Sub Group",
+  "route": "/master-sub-group",
+  "module": "Setting > Master Data",
+  "id": 119
+ },
+ {
+  "slug": "master-department",
+  "name": "Master Department",
+  "route": "/master-department",
+  "module": "Setting > Master Data",
+  "id": 124
+ },
+ {
+  "slug": "master-sub-department",
+  "name": "Master Sub Department",
+  "route": "/master-sub-department",
+  "module": "Setting > Master Data",
+  "id": 129
+ },
+ {
+  "slug": "master-unit",
+  "name": "Master Unit",
+  "route": "/master-unit",
+  "module": "Setting > Master Data",
+  "id": 134
+ },
+ {
+  "slug": "master-sub-unit",
+  "name": "Master Sub Unit",
+  "route": "/master-sub-unit",
+  "module": "Setting > Master Data",
+  "id": 139
+ },
+ {
+  "slug": "master-position",
+  "name": "Master Position",
+  "route": "/master-position",
+  "module": "Setting > Master Data",
+  "id": 144
+ },
+ {
+  "slug": "master-personal-area",
+  "name": "Master Personal Area",
+  "route": "/master-personal-area",
+  "module": "Setting > Master Data",
+  "id": 149
+ },
+ {
+  "slug": "master-personal-sub-area",
+  "name": "Master Personal Sub Area",
+  "route": "/master-personal-sub-area",
+  "module": "Setting > Master Data",
+  "id": 154
+ },
+ {
+  "slug": "master-band-position",
+  "name": "Master Band Position",
+  "route": "/master-band-position",
+  "module": "Setting > Master Data",
+  "id": 159
+ },
+ {
+  "slug": "municipio",
+  "name": "Municipio",
+  "route": "/municipio",
+  "module": "Setting > Master Data",
+  "id": 169
+ },
+ {
+  "slug": "reference-rate",
+  "name": "Reference Rate",
+  "route": "/reference-rate",
+  "module": "Setting > Master Data",
+  "id": 174
+ },
+ {
+  "slug": "document-reference-code",
+  "name": "Document Reference Code",
+  "route": "/document-reference-code",
+  "module": "Setting > Master Data",
+  "id": 179
+ },
+ {
+  "slug": "payment-method",
+  "name": "Payment Method",
+  "route": "/bank-information",
+  "module": "Setting > Master Data",
+  "id": 184
+ },
+ {
+  "slug": "non-regular-setting",
+  "name": "Non Regular Setting",
+  "route": "/non-regular-setting",
+  "module": "Setting > Master Data",
+  "id": 189
+ },
+ {
+  "slug": "custom-benefit-setting",
+  "name": "Custom Benefit Setting",
+  "route": "/custom-benefit-setting",
+  "module": "Setting > Master Data",
+  "id": 220
+ },
+ {
+  "slug": "custom-deduction-setting",
+  "name": "Custom Deduction Setting",
+  "route": "/custom-deduction-setting",
+  "module": "Setting > Master Data",
+  "id": 225
+ },
+ {
+  "slug": "employee-management",
+  "name": "Employee Management",
+  "route": "/employee-management",
+  "module": "Setting > Configuration",
+  "id": 195
+ },
+ {
+  "slug": "user-management",
+  "name": "User Management",
+  "route": "/user-management",
+  "module": "Setting > Configuration",
+  "id": 200
+ },
+ {
+  "slug": "role-management",
+  "name": "Role Management",
+  "route": "/role-management",
+  "module": "Setting > Configuration",
+  "id": 205
+ },
+ {
+  "slug": "permission-list",
+  "name": "Permission List",
+  "route": "/permission-list",
+  "module": "Setting > Configuration",
+  "id": 210
+ }
+]

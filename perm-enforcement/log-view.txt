@@ -1,0 +1,46 @@
+[view] set 44 permission untuk role Vice President ...
+[view] dashboard                  add=0 edit=0 del=0 rows=5/api:- reads=2
+[view] personal-information       add=0 edit=1 del=0 rows=0/api:- reads=2
+[view] daftar-gaji                add=0 edit=0 del=0 rows=10/api:11 reads=2
+[view] benefit                    add=0 edit=0 del=0 rows=0/api:6 reads=2 RELOADED FILTERED-EMPTY
+[view] non-regular-salary         add=0 edit=0 del=0 rows=6/api:- reads=2
+[view] homestaff                  add=0 edit=0 del=0 rows=0/api:0 reads=2
+[view] expat-local                add=0 edit=0 del=0 rows=0/api:0 reads=2
+[view] homestaff-company-fee      add=0 edit=0 del=0 rows=3/api:3 reads=2
+[view] deduction-transfer         add=0 edit=0 del=0 rows=0/api:0 reads=2
+[view] other-prorate              add=0 edit=0 del=0 rows=0/api:1 reads=2 RELOADED FILTERED-EMPTY
+[view] report-kkp                 add=0 edit=0 del=0 rows=0/api:- reads=2
+[view] journal-memo               add=0 edit=0 del=0 rows=0/api:141 reads=2 RELOADED FILTERED-EMPTY
+[view] rekap-bayar                add=0 edit=0 del=0 rows=2/api:- reads=2
+[view] payroll-approval-vp        add=0 edit=0 del=0 rows=0/api:- reads=2
+[view] generate-payslip           add=0 edit=0 del=0 rows=2/api:- reads=2
+[view] payslip                    add=0 edit=0 del=0 rows=0/api:- reads=2
+[view] esk                        add=1 edit=0 del=0 rows=3/api:8 reads=2
+[view] travel-management          add=0 edit=0 del=0 rows=10/api:33 reads=2
+[view] log-data                   add=0 edit=0 del=0 rows=15/api:5 reads=2
+[view] export-queue               add=0 edit=0 del=0 rows=2/api:- reads=2
+[view] approval-management        add=0 edit=0 del=0 rows=10/api:- reads=2
+[view] payroll-authorization      add=0 edit=0 del=0 rows=10/api:45 reads=2
+[view] travel-requests            add=0 edit=0 del=0 rows=3/api:3 reads=2
+[view] master-group               add=0 edit=0 del=0 rows=4/api:4 reads=2
+[view] master-sub-group           add=0 edit=0 del=0 rows=6/api:6 reads=2
+[view] master-department          add=0 edit=0 del=0 rows=8/api:8 reads=2
+[view] master-sub-department      add=0 edit=0 del=0 rows=10/api:30 reads=2
+[view] master-unit                add=0 edit=0 del=0 rows=4/api:4 reads=2
+[view] master-sub-unit            add=0 edit=0 del=0 rows=3/api:3 reads=2
+[view] master-position            add=0 edit=0 del=0 rows=10/api:159 reads=2
+[view] master-personal-area       add=0 edit=0 del=0 rows=10/api:18 reads=2
+[view] master-personal-sub-area   add=0 edit=0 del=0 rows=10/api:17 reads=2
+[view] master-band-position       add=0 edit=0 del=0 rows=6/api:6 reads=2
+[view] municipio                  add=0 edit=0 del=0 rows=10/api:15 reads=2
+[view] reference-rate             add=0 edit=0 del=0 rows=7/api:7 reads=2
+[view] document-reference-code    add=0 edit=0 del=0 rows=3/api:3 reads=2
+[view] payment-method             add=0 edit=0 del=0 rows=8/api:8 reads=2
+[view] non-regular-setting        add=0 edit=0 del=0 rows=10/api:15 reads=2
+[view] custom-benefit-setting     add=0 edit=0 del=0 rows=5/api:5 reads=2
+[view] custom-deduction-setting   add=0 edit=0 del=0 rows=10/api:19 reads=2
+[view] employee-management        add=0 edit=0 del=0 rows=10/api:479 reads=2
+[view] user-management            add=0 edit=0 del=0 rows=10/api:483 reads=2
+[view] role-management            add=0 edit=0 del=0 rows=10/api:30 reads=2
+[view] permission-list            add=1 edit=8 del=8 rows=10/api:53 reads=2
+[view] selesai → result-ui-view.json

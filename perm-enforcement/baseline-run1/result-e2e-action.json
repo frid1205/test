@@ -1,0 +1,24 @@
+{
+ "slug": "master-department",
+ "log": [
+  {
+   "step": "create-with-create-permission",
+   "ok": false,
+   "evidence": "e2e-action-master-department/02-add-result.png"
+  },
+  {
+   "step": "update-with-update-permission",
+   "ok": false,
+   "httpCalls": [
+    "POST /api/api/master-departments/store -> 403"
+   ],
+   "note": "",
+   "evidence": "e2e-action-master-department/04-edit-result.png"
+  },
+  {
+   "step": "delete-with-delete-permission",
+   "ok": true,
+   "evidence": "e2e-action-master-department/06-after-delete.png"
+  }
+ ]
+}

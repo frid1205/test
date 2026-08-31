@@ -1,0 +1,290 @@
+[
+ {
+  "no": 5,
+  "menu": "Personal Information",
+  "module": "Personal Information",
+  "action": "Edit",
+  "severity": "Low",
+  "reason": "tombol Edit tetap tampil saat role hanya View; tombol Edit ikut tampil pada role create/delete-only"
+ },
+ {
+  "no": 8,
+  "menu": "Daftar Gaji",
+  "module": "Payroll > Master KKP 2",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission daftar-gaji-update tidak diberikan; backend menolak dengan 403 padahal permission daftar-gaji-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 11,
+  "menu": "Benefit",
+  "module": "Payroll > Master KKP 2",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Tombol Edit per-baris tidak dapat diverifikasi: tabel kosong pada filter default halaman walau API modul ini punya 6 record (halaman memfilter periode/tanggal berjalan).), namun endpoint backend POST api/master-benefit-district/store tetap lolos tanpa permission benefit-update (create-only -> HTTP 422)"
+ },
+ {
+  "no": 14,
+  "menu": "Non Regular Salary",
+  "module": "Payroll > Master KKP 2",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission non-regular-salary-update tidak diberikan; backend menolak dengan 403 padahal permission non-regular-salary-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 17,
+  "menu": "Homestaff",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Tombol Edit per-baris tidak dapat diverifikasi: tabel kosong karena modul ini memang tidak punya data di environment dev saat pengujian (dikonfirmasi lewat API: 0 record).), namun endpoint backend POST api/master-salary-deduction-homestaff/store tetap lolos tanpa permission homestaff-update (create-only -> HTTP 422)"
+ },
+ {
+  "no": 20,
+  "menu": "Expat Local",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Tombol Edit per-baris tidak dapat diverifikasi: tabel kosong karena modul ini memang tidak punya data di environment dev saat pengujian (dikonfirmasi lewat API: 0 record).), namun endpoint backend POST api/master-salary-deduction-expat-local/store tetap lolos tanpa permission expat-local-update (create-only -> HTTP 422)"
+ },
+ {
+  "no": 23,
+  "menu": "Homestaff Company Fee",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission homestaff-company-fee-update tidak diberikan; backend menolak dengan 403 padahal permission homestaff-company-fee-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 26,
+  "menu": "Deduction Transfer",
+  "module": "Payroll > Master KKP 2 > Salary Deduction",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Tombol Edit per-baris tidak dapat diverifikasi: tabel kosong karena modul ini memang tidak punya data di environment dev saat pengujian (dikonfirmasi lewat API: 0 record).), namun endpoint backend POST api/deduction-transfer/store tetap lolos tanpa permission deduction-transfer-update (create-only -> HTTP 422)"
+ },
+ {
+  "no": 29,
+  "menu": "Other & Prorate",
+  "module": "Payroll > Master KKP 2",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Tombol Edit per-baris tidak dapat diverifikasi: tabel kosong pada filter default halaman walau API modul ini punya 1 record (halaman memfilter periode/tanggal berjalan).), namun endpoint backend POST api/master-prorate/store tetap lolos tanpa permission other-prorate-update (create-only -> HTTP 422)"
+ },
+ {
+  "no": 49,
+  "menu": "eSK",
+  "module": "eSK",
+  "action": "Add",
+  "severity": "High",
+  "reason": "tombol Add tetap tampil saat role hanya View; tombol Add ikut tampil pada role update/delete-only; backend meloloskan request (view-only -> HTTP 422, update-only -> HTTP 422, delete-only -> HTTP 422) padahal permission esk-create tidak diberikan"
+ },
+ {
+  "no": 50,
+  "menu": "eSK",
+  "module": "eSK",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Menu tidak menyediakan action Edit (tombol tetap tidak muncul walau role diberi permission penuh) - termasuk kondisi khusus menu view only, tidak dijadikan bug.), namun endpoint backend PUT api/esk/update/{uuid} tetap lolos tanpa permission esk-update (view-only -> HTTP 422, create-only -> HTTP 422, delete-only -> HTTP 422)"
+ },
+ {
+  "no": 51,
+  "menu": "eSK",
+  "module": "eSK",
+  "action": "Delete",
+  "severity": "High",
+  "reason": "Tombol Delete tidak dapat diverifikasi di UI (Menu tidak menyediakan action Delete (tombol tetap tidak muncul walau role diberi permission penuh) - termasuk kondisi khusus menu view only, tidak dijadikan bug.), namun endpoint backend DELETE api/esk/delete/{uuid} tetap lolos tanpa permission esk-delete (view-only -> HTTP 404, create-only -> HTTP 404, update-only -> HTTP 404)"
+ },
+ {
+  "no": 52,
+  "menu": "Travel Management",
+  "module": "Travel Management",
+  "action": "Add",
+  "severity": "High",
+  "reason": "backend meloloskan request (view-only -> HTTP 422, update-only -> HTTP 422, delete-only -> HTTP 422) padahal permission travel-management-create tidak diberikan"
+ },
+ {
+  "no": 53,
+  "menu": "Travel Management",
+  "module": "Travel Management",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Menu tidak menyediakan action Edit (tombol tetap tidak muncul walau role diberi permission penuh) - termasuk kondisi khusus menu view only, tidak dijadikan bug.), namun endpoint backend PUT api/travel-requests/update/{uuid} tetap lolos tanpa permission travel-management-update (view-only -> HTTP 422, create-only -> HTTP 422, delete-only -> HTTP 422)"
+ },
+ {
+  "no": 54,
+  "menu": "Travel Management",
+  "module": "Travel Management",
+  "action": "Delete",
+  "severity": "High",
+  "reason": "Tombol Delete tidak dapat diverifikasi di UI (Menu tidak menyediakan action Delete (tombol tetap tidak muncul walau role diberi permission penuh) - termasuk kondisi khusus menu view only, tidak dijadikan bug.), namun endpoint backend DELETE api/travel-requests/delete-receipt/{uuid}/{costId} tetap lolos tanpa permission travel-management-delete (view-only -> HTTP 404, create-only -> HTTP 404, update-only -> HTTP 404)"
+ },
+ {
+  "no": 62,
+  "menu": "Approval Management",
+  "module": "Setting > Approval Management",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "Tombol Edit tidak dapat diverifikasi di UI (Menu tidak menyediakan action Edit (tombol tetap tidak muncul walau role diberi permission penuh) - termasuk kondisi khusus menu view only, tidak dijadikan bug.), namun endpoint backend POST api/profile-edit-approval/approve/{uuid} tetap lolos tanpa permission approval-management-update (view-only -> HTTP 404, create-only -> HTTP 404, delete-only -> HTTP 404)"
+ },
+ {
+  "no": 65,
+  "menu": "Payroll Authorization",
+  "module": "Setting > Approval Management",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission payroll-authorization-update tidak diberikan; backend menolak dengan 403 padahal permission payroll-authorization-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 71,
+  "menu": "Master Group",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-group-update tidak diberikan; backend menolak dengan 403 padahal permission master-group-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 74,
+  "menu": "Master Sub Group",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-sub-group-update tidak diberikan; backend menolak dengan 403 padahal permission master-sub-group-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 77,
+  "menu": "Master Department",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-department-update tidak diberikan; backend menolak dengan 403 padahal permission master-department-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 80,
+  "menu": "Master Sub Department",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-sub-department-update tidak diberikan; backend menolak dengan 403 padahal permission master-sub-department-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 83,
+  "menu": "Master Unit",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-unit-update tidak diberikan; backend menolak dengan 403 padahal permission master-unit-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 86,
+  "menu": "Master Sub Unit",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-sub-unit-update tidak diberikan; backend menolak dengan 403 padahal permission master-sub-unit-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 89,
+  "menu": "Master Position",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-position-update tidak diberikan; backend menolak dengan 403 padahal permission master-position-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 92,
+  "menu": "Master Personal Area",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-personal-area-update tidak diberikan; backend menolak dengan 403 padahal permission master-personal-area-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 95,
+  "menu": "Master Personal Sub Area",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-personal-sub-area-update tidak diberikan; backend menolak dengan 403 padahal permission master-personal-sub-area-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 98,
+  "menu": "Master Band Position",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission master-band-position-update tidak diberikan; backend menolak dengan 403 padahal permission master-band-position-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 101,
+  "menu": "Municipio",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission municipio-update tidak diberikan; backend menolak dengan 403 padahal permission municipio-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 104,
+  "menu": "Reference Rate",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission reference-rate-update tidak diberikan; backend menolak dengan 403 padahal permission reference-rate-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 107,
+  "menu": "Document Reference Code",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission document-reference-code-update tidak diberikan; backend menolak dengan 403 padahal permission document-reference-code-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 110,
+  "menu": "Payment Method",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission payment-method-update tidak diberikan; backend menolak dengan 403 padahal permission payment-method-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 122,
+  "menu": "Employee Management",
+  "module": "Setting > Configuration",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "backend meloloskan request (create-only -> HTTP 422) padahal permission employee-management-update tidak diberikan; backend menolak dengan 403 padahal permission employee-management-update sudah diberikan (endpoint simpan Edit sama dengan Add sehingga yang dicek backend adalah permission -create)"
+ },
+ {
+  "no": 130,
+  "menu": "Permission List",
+  "module": "Setting > Configuration",
+  "action": "Add",
+  "severity": "High",
+  "reason": "tombol Add tetap tampil saat role hanya View; tombol Add ikut tampil pada role update/delete-only"
+ },
+ {
+  "no": 131,
+  "menu": "Permission List",
+  "module": "Setting > Configuration",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "tombol Edit tetap tampil saat role hanya View; tombol Edit ikut tampil pada role create/delete-only"
+ },
+ {
+  "no": 132,
+  "menu": "Permission List",
+  "module": "Setting > Configuration",
+  "action": "Delete",
+  "severity": "High",
+  "reason": "tombol Delete tetap tampil saat role hanya View; tombol Delete ikut tampil pada role create/update-only"
+ },
+ {
+  "no": 134,
+  "menu": "Master Department",
+  "module": "Setting > Master Data",
+  "action": "Edit",
+  "severity": "High",
+  "reason": "E2E: klik Update pada form Edit ditolak HTTP 403 walau permission master-department-update diberikan; data tidak berubah"
+ }
+]

@@ -1,0 +1,542 @@
+{
+ "log-data": {
+  "create": null,
+  "update": null,
+  "delete": null
+ },
+ "document-reference-code": {
+  "create": {
+   "method": "POST",
+   "uri": "api/automatic-numbering/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/automatic-numbering/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "custom-benefit-setting": {
+  "create": {
+   "method": "POST",
+   "uri": "api/custom-benefit-entries/store/{benefitUuid}",
+   "risky": false
+  },
+  "update": {
+   "method": "PATCH",
+   "uri": "api/custom-benefits/toggle-status/{uuid}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/custom-benefits/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "custom-deduction-setting": {
+  "create": {
+   "method": "POST",
+   "uri": "api/custom-deduction-entries/store/{deductionUuid}",
+   "risky": false
+  },
+  "update": {
+   "method": "PATCH",
+   "uri": "api/custom-deductions/toggle-status/{uuid}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/custom-deductions/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "deduction-transfer": {
+  "create": {
+   "method": "POST",
+   "uri": "api/deduction-transfer/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/deduction-transfer/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "employee-management": {
+  "create": {
+   "method": "POST",
+   "uri": "api/employee-personal-info",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/employee-personal-info/{uuid}",
+   "risky": false
+  }
+ },
+ "esk": {
+  "create": {
+   "method": "POST",
+   "uri": "api/esk/store",
+   "risky": false,
+   "unguarded": true
+  },
+  "update": {
+   "method": "PUT",
+   "uri": "api/esk/update/{uuid}",
+   "risky": false,
+   "unguarded": true
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/esk/delete/{uuid}",
+   "risky": false,
+   "unguarded": true
+  }
+ },
+ "journal-memo": {
+  "create": {
+   "method": "POST",
+   "uri": "api/generate-moju/store",
+   "risky": true
+  },
+  "update": {
+   "method": "POST",
+   "uri": "api/salary-component-moju-settings/store",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/salary-component-moju-settings/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "generate-payslip": {
+  "create": {
+   "method": "POST",
+   "uri": "api/generate-payroll/store",
+   "risky": true
+  },
+  "update": {
+   "method": "PUT",
+   "uri": "api/generate-payroll/payroll-list/{uuid}/status",
+   "risky": true
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/generate-payroll/delete/{uuid}",
+   "risky": true
+  }
+ },
+ "benefit": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-benefit-district/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-benefit-district/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-band-position": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-band-positions/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-band-positions/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "payment-method": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-bank/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-bank/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "daftar-gaji": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-reguler-thp/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-reguler-thp/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-department": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-departments/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-departments/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-group": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-group/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-group/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "municipio": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-munipicio/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-munipicio/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-personal-area": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-personal-areas/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-personal-areas/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-personal-sub-area": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-personal-sub-areas/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-personal-sub-areas/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-position": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-positions/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-positions/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "other-prorate": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-prorate/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-prorate/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "expat-local": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-salary-deduction-expat-local/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-salary-deduction-expat-local/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "homestaff": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-salary-deduction-homestaff/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-salary-deduction-homestaff/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "homestaff-company-fee": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-salary-deduction-homestaff-company-fee/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-salary-deduction-homestaff-company-fee/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-sub-department": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-sub-departments/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-sub-departments/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-sub-group": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-sub-groups/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-sub-groups/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-sub-unit": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-sub-units/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-sub-units/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "master-unit": {
+  "create": {
+   "method": "POST",
+   "uri": "api/master-units/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/master-units/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "non-regular-salary": {
+  "create": {
+   "method": "POST",
+   "uri": "api/non-regular-salary-bfkj/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/non-regular-salary-bfkj/delete/{year}/{employee_uuid}",
+   "risky": false
+  }
+ },
+ "rekap-bayar": {
+  "create": {
+   "method": "POST",
+   "uri": "api/salary-payment/list-non-reguler/{period}/{uuid}",
+   "risky": false
+  },
+  "update": {
+   "method": "PUT",
+   "uri": "api/payment-receipt-notes/update/{uuid}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/payment-receipt-notes/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "report-kkp": {
+  "create": {
+   "method": "POST",
+   "uri": "api/salary-payment/list-non-reguler/{period}/{uuid}",
+   "risky": false
+  },
+  "update": {
+   "method": "POST",
+   "uri": "api/payroll-reports/review/{uuid}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/payroll-reports/{uuid}",
+   "risky": false
+  }
+ },
+ "permission-list": {
+  "create": {
+   "method": "POST",
+   "uri": "api/permissions",
+   "risky": false
+  },
+  "update": {
+   "method": "PUT",
+   "uri": "api/permissions/{id}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/permissions/{id}",
+   "risky": false
+  }
+ },
+ "reference-rate": {
+  "create": {
+   "method": "POST",
+   "uri": "api/reference-rate/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/reference-rate/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "payroll-authorization": {
+  "create": {
+   "method": "POST",
+   "uri": "api/report-authorization/store",
+   "risky": false
+  },
+  "update": null,
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/report-authorization/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "role-management": {
+  "create": {
+   "method": "POST",
+   "uri": "api/roles/store",
+   "risky": false
+  },
+  "update": {
+   "method": "POST",
+   "uri": "api/roles/update/{id}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/roles/delete/{id}",
+   "risky": false
+  }
+ },
+ "non-regular-setting": {
+  "create": {
+   "method": "POST",
+   "uri": "api/salary-components/store-calculation-data/{uuid}",
+   "risky": false
+  },
+  "update": {
+   "method": "PUT",
+   "uri": "api/salary-components/update-calculation-data/{uuid}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/salary-components/delete/{uuid}",
+   "risky": false
+  }
+ },
+ "travel-requests": {
+  "create": null,
+  "update": {
+   "method": "PUT",
+   "uri": "api/travel-approval-settings/update/{id}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/travel-approval-settings/delete/{id}",
+   "risky": false
+  }
+ },
+ "user-management": {
+  "create": {
+   "method": "POST",
+   "uri": "api/users",
+   "risky": false
+  },
+  "update": {
+   "method": "PUT",
+   "uri": "api/users/{uuid}",
+   "risky": false
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/users/{uuid}",
+   "risky": false
+  }
+ },
+ "travel-management": {
+  "create": {
+   "method": "POST",
+   "uri": "api/travel-requests/store",
+   "risky": false,
+   "unguarded": true
+  },
+  "update": {
+   "method": "PUT",
+   "uri": "api/travel-requests/update/{uuid}",
+   "risky": false,
+   "unguarded": true
+  },
+  "delete": {
+   "method": "DELETE",
+   "uri": "api/travel-requests/delete-receipt/{uuid}/{costId}",
+   "risky": false,
+   "unguarded": true
+  }
+ }
+}

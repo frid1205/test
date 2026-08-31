@@ -1,0 +1,1218 @@
+{
+ "pass": "delete",
+ "granted": "delete",
+ "results": [
+  {
+   "slug": "dashboard",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "dashboard",
+   "action": "update",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "dashboard",
+   "action": "delete",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "personal-information",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "personal-information",
+   "action": "update",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "personal-information",
+   "action": "delete",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "daftar-gaji",
+   "action": "create",
+   "endpoint": "POST api/master-reguler-thp/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-reguler-thp/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "daftar-gaji",
+   "action": "update",
+   "endpoint": "POST api/master-reguler-thp/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-reguler-thp/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "daftar-gaji",
+   "action": "delete",
+   "endpoint": "DELETE api/master-reguler-thp/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-reguler-thp/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"regular THP not found.\"}"
+  },
+  {
+   "slug": "benefit",
+   "action": "create",
+   "endpoint": "POST api/master-benefit-district/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-benefit-district/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "benefit",
+   "action": "update",
+   "endpoint": "POST api/master-benefit-district/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-benefit-district/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "benefit",
+   "action": "delete",
+   "endpoint": "DELETE api/master-benefit-district/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-benefit-district/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Benefit district not found.\"}"
+  },
+  {
+   "slug": "non-regular-salary",
+   "action": "create",
+   "endpoint": "POST api/non-regular-salary-bfkj/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/non-regular-salary-bfkj/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "non-regular-salary",
+   "action": "update",
+   "endpoint": "POST api/non-regular-salary-bfkj/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/non-regular-salary-bfkj/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "non-regular-salary",
+   "action": "delete",
+   "endpoint": "DELETE api/non-regular-salary-bfkj/delete/{year}/{employee_uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/non-regular-salary-bfkj/delete/1900/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Non Regular Salary BFKJ not found.\"}"
+  },
+  {
+   "slug": "homestaff",
+   "action": "create",
+   "endpoint": "POST api/master-salary-deduction-homestaff/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-homestaff/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "homestaff",
+   "action": "update",
+   "endpoint": "POST api/master-salary-deduction-homestaff/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-homestaff/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "homestaff",
+   "action": "delete",
+   "endpoint": "DELETE api/master-salary-deduction-homestaff/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-homestaff/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Master salary deduction homestaff not found.\"}"
+  },
+  {
+   "slug": "expat-local",
+   "action": "create",
+   "endpoint": "POST api/master-salary-deduction-expat-local/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-expat-local/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "expat-local",
+   "action": "update",
+   "endpoint": "POST api/master-salary-deduction-expat-local/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-expat-local/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "expat-local",
+   "action": "delete",
+   "endpoint": "DELETE api/master-salary-deduction-expat-local/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-expat-local/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Master salary deduction expat local not found.\"}"
+  },
+  {
+   "slug": "homestaff-company-fee",
+   "action": "create",
+   "endpoint": "POST api/master-salary-deduction-homestaff-company-fee/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-homestaff-company-fee/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "homestaff-company-fee",
+   "action": "update",
+   "endpoint": "POST api/master-salary-deduction-homestaff-company-fee/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-homestaff-company-fee/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "homestaff-company-fee",
+   "action": "delete",
+   "endpoint": "DELETE api/master-salary-deduction-homestaff-company-fee/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-salary-deduction-homestaff-company-fee/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Master salary deduction homestaff company fee not found.\"}"
+  },
+  {
+   "slug": "deduction-transfer",
+   "action": "create",
+   "endpoint": "POST api/deduction-transfer/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/deduction-transfer/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "deduction-transfer",
+   "action": "update",
+   "endpoint": "POST api/deduction-transfer/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/deduction-transfer/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "deduction-transfer",
+   "action": "delete",
+   "endpoint": "DELETE api/deduction-transfer/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/deduction-transfer/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"deduction transfer not found.\"}"
+  },
+  {
+   "slug": "other-prorate",
+   "action": "create",
+   "endpoint": "POST api/master-prorate/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-prorate/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "other-prorate",
+   "action": "update",
+   "endpoint": "POST api/master-prorate/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-prorate/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "other-prorate",
+   "action": "delete",
+   "endpoint": "DELETE api/master-prorate/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-prorate/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Master prorate not found.\"}"
+  },
+  {
+   "slug": "report-kkp",
+   "action": "create",
+   "endpoint": "POST api/salary-payment/list-non-reguler/{period}/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/salary-payment/list-non-reguler/1900-01/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "report-kkp",
+   "action": "update",
+   "endpoint": "POST api/payroll-reports/review/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/payroll-reports/review/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "report-kkp",
+   "action": "delete",
+   "endpoint": "DELETE api/payroll-reports/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/payroll-reports/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"message\":\"No query results for model [App\\\\Models\\\\PayrollReport].\",\"exception\":\"Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\NotFoundHttpException\",\"file\":\"/va"
+  },
+  {
+   "slug": "journal-memo",
+   "action": "create",
+   "endpoint": "POST api/generate-moju/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/generate-moju/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "journal-memo",
+   "action": "update",
+   "endpoint": "POST api/salary-component-moju-settings/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/salary-component-moju-settings/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "journal-memo",
+   "action": "delete",
+   "endpoint": "DELETE api/salary-component-moju-settings/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/salary-component-moju-settings/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Moju setting not found.\"}"
+  },
+  {
+   "slug": "rekap-bayar",
+   "action": "create",
+   "endpoint": "POST api/salary-payment/list-non-reguler/{period}/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/salary-payment/list-non-reguler/1900-01/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "rekap-bayar",
+   "action": "update",
+   "endpoint": "PUT api/payment-receipt-notes/update/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/payment-receipt-notes/update/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "rekap-bayar",
+   "action": "delete",
+   "endpoint": "DELETE api/payment-receipt-notes/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/payment-receipt-notes/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Note not found\"}"
+  },
+  {
+   "slug": "payroll-approval-vp",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "payroll-approval-vp",
+   "action": "update",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "payroll-approval-vp",
+   "action": "delete",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "generate-payslip",
+   "action": "create",
+   "endpoint": "POST api/generate-payroll/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/generate-payroll/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "generate-payslip",
+   "action": "update",
+   "endpoint": "PUT api/generate-payroll/payroll-list/{uuid}/status",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/generate-payroll/payroll-list/00000000-0000-4000-8000-000000000000/status",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "generate-payslip",
+   "action": "delete",
+   "endpoint": "DELETE api/generate-payroll/delete/{uuid}",
+   "viaCreate": false,
+   "skipped": "risky-positive"
+  },
+  {
+   "slug": "payslip",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "payslip",
+   "action": "update",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "payslip",
+   "action": "delete",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "esk",
+   "action": "create",
+   "endpoint": "POST api/esk/store",
+   "unguarded": true,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/esk/store",
+   "status": 422,
+   "message": "{\"message\":\"The type field is required. (and 1 more error)\",\"errors\":{\"type\":[\"The type field is required.\"],\"approval_flows\":[\"The approval flows field is requ"
+  },
+  {
+   "slug": "esk",
+   "action": "update",
+   "endpoint": "PUT api/esk/update/{uuid}",
+   "unguarded": true,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/esk/update/00000000-0000-4000-8000-000000000000",
+   "status": 422,
+   "message": "{\"error\":true,\"message\":\"Only draft or rejected documents can be updated\"}"
+  },
+  {
+   "slug": "esk",
+   "action": "delete",
+   "endpoint": "DELETE api/esk/delete/{uuid}",
+   "unguarded": true,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/esk/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Only draft documents can be deleted\"}"
+  },
+  {
+   "slug": "travel-management",
+   "action": "create",
+   "endpoint": "POST api/travel-requests/store",
+   "unguarded": true,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/travel-requests/store",
+   "status": 422,
+   "message": "{\"message\":\"The assignment title field is required. (and 9 more errors)\",\"errors\":{\"assignment_title\":[\"The assignment title field is required.\"],\"pic_employee_"
+  },
+  {
+   "slug": "travel-management",
+   "action": "update",
+   "endpoint": "PUT api/travel-requests/update/{uuid}",
+   "unguarded": true,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/travel-requests/update/00000000-0000-4000-8000-000000000000",
+   "status": 422,
+   "message": "{\"message\":\"The assignment title field is required. (and 9 more errors)\",\"errors\":{\"assignment_title\":[\"The assignment title field is required.\"],\"pic_employee_"
+  },
+  {
+   "slug": "travel-management",
+   "action": "delete",
+   "endpoint": "DELETE api/travel-requests/delete-receipt/{uuid}/{costId}",
+   "unguarded": true,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/travel-requests/delete-receipt/00000000-0000-4000-8000-000000000000/999999999",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Travel request not found\"}"
+  },
+  {
+   "slug": "log-data",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "log-data",
+   "action": "update",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "log-data",
+   "action": "delete",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "export-queue",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "export-queue",
+   "action": "update",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "export-queue",
+   "action": "delete",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "approval-management",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "approval-management",
+   "action": "update",
+   "endpoint": "POST api/profile-edit-approval/approve/{uuid}",
+   "unguarded": true,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/profile-edit-approval/approve/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"message\":\"Request not found\"}"
+  },
+  {
+   "slug": "approval-management",
+   "action": "delete",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "payroll-authorization",
+   "action": "create",
+   "endpoint": "POST api/report-authorization/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/report-authorization/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "payroll-authorization",
+   "action": "update",
+   "endpoint": "POST api/report-authorization/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/report-authorization/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "payroll-authorization",
+   "action": "delete",
+   "endpoint": "DELETE api/report-authorization/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/report-authorization/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"report authorization not found.\"}"
+  },
+  {
+   "slug": "travel-requests",
+   "action": "create",
+   "skipped": "no-endpoint"
+  },
+  {
+   "slug": "travel-requests",
+   "action": "update",
+   "endpoint": "PUT api/travel-approval-settings/update/{id}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/travel-approval-settings/update/999999999",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "travel-requests",
+   "action": "delete",
+   "endpoint": "DELETE api/travel-approval-settings/delete/{id}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/travel-approval-settings/delete/999999999",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Approval setting not found\"}"
+  },
+  {
+   "slug": "master-group",
+   "action": "create",
+   "endpoint": "POST api/master-group/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-group/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-group",
+   "action": "update",
+   "endpoint": "POST api/master-group/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-group/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-group",
+   "action": "delete",
+   "endpoint": "DELETE api/master-group/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-group/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-sub-group",
+   "action": "create",
+   "endpoint": "POST api/master-sub-groups/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-groups/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-sub-group",
+   "action": "update",
+   "endpoint": "POST api/master-sub-groups/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-groups/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-sub-group",
+   "action": "delete",
+   "endpoint": "DELETE api/master-sub-groups/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-groups/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-department",
+   "action": "create",
+   "endpoint": "POST api/master-departments/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-departments/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-department",
+   "action": "update",
+   "endpoint": "POST api/master-departments/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-departments/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-department",
+   "action": "delete",
+   "endpoint": "DELETE api/master-departments/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-departments/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-sub-department",
+   "action": "create",
+   "endpoint": "POST api/master-sub-departments/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-departments/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-sub-department",
+   "action": "update",
+   "endpoint": "POST api/master-sub-departments/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-departments/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-sub-department",
+   "action": "delete",
+   "endpoint": "DELETE api/master-sub-departments/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-departments/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-unit",
+   "action": "create",
+   "endpoint": "POST api/master-units/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-units/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-unit",
+   "action": "update",
+   "endpoint": "POST api/master-units/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-units/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-unit",
+   "action": "delete",
+   "endpoint": "DELETE api/master-units/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-units/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-sub-unit",
+   "action": "create",
+   "endpoint": "POST api/master-sub-units/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-units/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-sub-unit",
+   "action": "update",
+   "endpoint": "POST api/master-sub-units/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-units/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-sub-unit",
+   "action": "delete",
+   "endpoint": "DELETE api/master-sub-units/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-sub-units/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-position",
+   "action": "create",
+   "endpoint": "POST api/master-positions/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-positions/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-position",
+   "action": "update",
+   "endpoint": "POST api/master-positions/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-positions/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-position",
+   "action": "delete",
+   "endpoint": "DELETE api/master-positions/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-positions/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-personal-area",
+   "action": "create",
+   "endpoint": "POST api/master-personal-areas/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-personal-areas/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-personal-area",
+   "action": "update",
+   "endpoint": "POST api/master-personal-areas/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-personal-areas/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-personal-area",
+   "action": "delete",
+   "endpoint": "DELETE api/master-personal-areas/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-personal-areas/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-personal-sub-area",
+   "action": "create",
+   "endpoint": "POST api/master-personal-sub-areas/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-personal-sub-areas/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-personal-sub-area",
+   "action": "update",
+   "endpoint": "POST api/master-personal-sub-areas/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-personal-sub-areas/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-personal-sub-area",
+   "action": "delete",
+   "endpoint": "DELETE api/master-personal-sub-areas/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-personal-sub-areas/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "master-band-position",
+   "action": "create",
+   "endpoint": "POST api/master-band-positions/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-band-positions/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-band-position",
+   "action": "update",
+   "endpoint": "POST api/master-band-positions/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-band-positions/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "master-band-position",
+   "action": "delete",
+   "endpoint": "DELETE api/master-band-positions/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-band-positions/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"Record not found.\"}"
+  },
+  {
+   "slug": "municipio",
+   "action": "create",
+   "endpoint": "POST api/master-munipicio/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-munipicio/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "municipio",
+   "action": "update",
+   "endpoint": "POST api/master-munipicio/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-munipicio/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "municipio",
+   "action": "delete",
+   "endpoint": "DELETE api/master-munipicio/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-munipicio/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Master munipicio not found.\"}"
+  },
+  {
+   "slug": "reference-rate",
+   "action": "create",
+   "endpoint": "POST api/reference-rate/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/reference-rate/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "reference-rate",
+   "action": "update",
+   "endpoint": "POST api/reference-rate/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/reference-rate/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "reference-rate",
+   "action": "delete",
+   "endpoint": "DELETE api/reference-rate/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/reference-rate/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"reference rate not found.\"}"
+  },
+  {
+   "slug": "document-reference-code",
+   "action": "create",
+   "endpoint": "POST api/automatic-numbering/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/automatic-numbering/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "document-reference-code",
+   "action": "update",
+   "endpoint": "POST api/automatic-numbering/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/automatic-numbering/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "document-reference-code",
+   "action": "delete",
+   "endpoint": "DELETE api/automatic-numbering/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/automatic-numbering/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Automatic numbering configuration not found.\"}"
+  },
+  {
+   "slug": "payment-method",
+   "action": "create",
+   "endpoint": "POST api/master-bank/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-bank/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "payment-method",
+   "action": "update",
+   "endpoint": "POST api/master-bank/store",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-bank/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "payment-method",
+   "action": "delete",
+   "endpoint": "DELETE api/master-bank/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/master-bank/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"master bank not found.\"}"
+  },
+  {
+   "slug": "non-regular-setting",
+   "action": "create",
+   "endpoint": "POST api/salary-components/store-calculation-data/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/salary-components/store-calculation-data/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "non-regular-setting",
+   "action": "update",
+   "endpoint": "PUT api/salary-components/update-calculation-data/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/salary-components/update-calculation-data/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "non-regular-setting",
+   "action": "delete",
+   "endpoint": "DELETE api/salary-components/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/salary-components/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Salary component not found.\"}"
+  },
+  {
+   "slug": "custom-benefit-setting",
+   "action": "create",
+   "endpoint": "POST api/custom-benefit-entries/store/{benefitUuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/custom-benefit-entries/store/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "custom-benefit-setting",
+   "action": "update",
+   "endpoint": "PATCH api/custom-benefits/toggle-status/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/custom-benefits/toggle-status/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "custom-benefit-setting",
+   "action": "delete",
+   "endpoint": "DELETE api/custom-benefits/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/custom-benefits/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Custom benefit not found.\"}"
+  },
+  {
+   "slug": "custom-deduction-setting",
+   "action": "create",
+   "endpoint": "POST api/custom-deduction-entries/store/{deductionUuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/custom-deduction-entries/store/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "custom-deduction-setting",
+   "action": "update",
+   "endpoint": "PATCH api/custom-deductions/toggle-status/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/custom-deductions/toggle-status/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "custom-deduction-setting",
+   "action": "delete",
+   "endpoint": "DELETE api/custom-deductions/delete/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/custom-deductions/delete/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":\"Custom deduction not found.\"}"
+  },
+  {
+   "slug": "employee-management",
+   "action": "create",
+   "endpoint": "POST api/employee-personal-info",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/employee-personal-info",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "employee-management",
+   "action": "update",
+   "endpoint": "POST api/employee-personal-info",
+   "unguarded": false,
+   "viaCreate": true,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/employee-personal-info",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "employee-management",
+   "action": "delete",
+   "endpoint": "DELETE api/employee-personal-info/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/employee-personal-info/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"message\":\"No query results for model [App\\\\Models\\\\EmployeePersonalInfo].\",\"exception\":\"Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\NotFoundHttpException\",\"fil"
+  },
+  {
+   "slug": "user-management",
+   "action": "create",
+   "endpoint": "POST api/users",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/users",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "user-management",
+   "action": "update",
+   "endpoint": "PUT api/users/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/users/00000000-0000-4000-8000-000000000000",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "user-management",
+   "action": "delete",
+   "endpoint": "DELETE api/users/{uuid}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/users/00000000-0000-4000-8000-000000000000",
+   "status": 404,
+   "message": "{\"error\":true,\"message\":\"User not found or failed to delete\"}"
+  },
+  {
+   "slug": "role-management",
+   "action": "create",
+   "endpoint": "POST api/roles/store",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/roles/store",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "role-management",
+   "action": "update",
+   "endpoint": "POST api/roles/update/{id}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/roles/update/999999999",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "role-management",
+   "action": "delete",
+   "endpoint": "DELETE api/roles/delete/{id}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/roles/delete/999999999",
+   "status": 404,
+   "message": "{\"message\":\"No query results for model [App\\\\Models\\\\Role] 999999999\",\"exception\":\"Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\NotFoundHttpException\",\"file\":\"/va"
+  },
+  {
+   "slug": "permission-list",
+   "action": "create",
+   "endpoint": "POST api/permissions",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/permissions",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "permission-list",
+   "action": "update",
+   "endpoint": "PUT api/permissions/{id}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/permissions/999999999",
+   "status": 403,
+   "message": "{\"error\":true,\"message\":\"Access denied. You do not have permission to perform this action.\"}"
+  },
+  {
+   "slug": "permission-list",
+   "action": "delete",
+   "endpoint": "DELETE api/permissions/{id}",
+   "unguarded": false,
+   "viaCreate": false,
+   "url": "https://telkomcel-s1.lumoshive.net/api/api/permissions/999999999",
+   "status": 500,
+   "message": "{\"message\":\"Call to a member function delete() on null\",\"exception\":\"Error\",\"file\":\"/var/www/app/Repositories/PermissionRepository.php\",\"line\":96,\"trace\":[{\"fil"
+  }
+ ]
+}
