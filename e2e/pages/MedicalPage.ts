@@ -1,5 +1,5 @@
 import { type Locator, type Page, expect } from "@playwright/test";
-import { MONTH_NAMES_ID, chooseCombobox, moneyFormat, pickMonth, submitAndWait } from "../helpers/ui";
+import { MONTH_NAMES_ID, chooseCombobox, formField, moneyFormat, pickMonth, submitAndWait } from "../helpers/ui";
 
 export interface MedicalCase {
   id: string | number;
@@ -30,9 +30,10 @@ export class MedicalPage {
 
   private async fillForm(data: MedicalCase): Promise<void> {
     const dialog = this.dialog;
-    await chooseCombobox(this.page, dialog, dialog.locator("#lbl_23ed10_employee_210"), data.employee, data.employee);
-    await dialog.locator("#lbl_905868_amount_249").fill(String(data.amount));
-    await pickMonth(this.page, dialog.locator("#lbl_905868_period_267"), MONTH_NAMES_ID[Number(data.period.slice(5, 7)) - 1], data.period.slice(0, 4));
+    await chooseCombobox(this.page, dialog, dialog.locator("#lbl_23ed10_employee_210").or(dialog.getByRole("combobox").first()), data.employee, data.employee);
+    const amountInput = dialog.locator("#lbl_905868_amount_249").or(formField(dialog, "Amount").locator("input")).first();
+    await amountInput.fill(String(data.amount));
+    await pickMonth(this.page, dialog.locator("#lbl_905868_period_267").or(formField(dialog, "Period").locator("button")).first(), MONTH_NAMES_ID[Number(data.period.slice(5, 7)) - 1], data.period.slice(0, 4));
   }
 
   async add(data: MedicalCase): Promise<void> {
@@ -47,7 +48,8 @@ export class MedicalPage {
     await row.getByRole("button", { name: "Edit" }).click();
     await expect(this.dialog).toBeVisible();
     const dialog = this.dialog;
-    await dialog.locator("#lbl_905868_amount_249").fill(String(data.amount));
+    const amountInput = dialog.locator("#lbl_905868_amount_249").or(formField(dialog, "Amount").locator("input")).first();
+    await amountInput.fill(String(data.amount));
     await submitAndWait(this.page, this.dialog, "Update", "/master-all-benefit-and-others/store", "Medical benefit updated successfully");
     await this.verifyRow(data);
   }

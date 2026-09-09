@@ -4,3 +4,5 @@ e2e-results/
 e2e/.auth/
 e2e/downloadedFile/*
 e2e/config.ts
+e2e/compare-reports/
+*.diff.log

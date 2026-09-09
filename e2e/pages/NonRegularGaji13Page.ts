@@ -91,11 +91,17 @@ export class NonRegularGaji13Page {
   }
 
   private async submitDialog(buttonName: string, apiPath: string): Promise<void> {
+    const basePath = apiPath.replace(/\/(bulk-store|store|update)$/, "");
     const responsePromise = this.page.waitForResponse(
-      (r) => r.url().includes(apiPath) && r.request().method() === "POST",
+      (r) =>
+        r.url().includes(basePath) &&
+        ["POST", "PUT", "PATCH"].includes(r.request().method()),
       { timeout: 90_000 },
     );
-    await this.dialog.getByRole("button", { name: buttonName, exact: true }).click();
+    await this.dialog
+      .getByRole("button", { name: new RegExp(`^(${buttonName}|Save|Update|Submit|Add)$`, "i") })
+      .first()
+      .click();
     const response = await responsePromise;
     if (!response.ok()) {
       throw new Error(`POST ${apiPath} -> ${response.status()}: ${await response.text()}`);

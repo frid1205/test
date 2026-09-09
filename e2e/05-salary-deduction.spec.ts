@@ -83,7 +83,7 @@ const sheets = readAllSheets(DATA_FILE);
 const homestaffRaw = readSheetRaw(DATA_FILE, "Homestaff");
 const expatRaw = readSheetRaw(DATA_FILE, "ExpatLocal");
 
-test.describe("Salary Deduction - Homestaff", () => {
+test.describe.serial("Salary Deduction - Homestaff", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of (sheets.Homestaff ?? []).entries()) {
@@ -118,7 +118,7 @@ test.describe("Salary Deduction - Homestaff", () => {
   });
 });
 
-test.describe("Salary Deduction - Expat Local", () => {
+test.describe.serial("Salary Deduction - Expat Local", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of (sheets.ExpatLocal ?? []).entries()) {

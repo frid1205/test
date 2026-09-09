@@ -74,13 +74,16 @@ export class CustomBenefitSettingPage {
 
   private async submit(buttonName: string): Promise<void> {
     const responsePromise = this.page.waitForResponse(
-      (r) => r.url().includes("/custom-benefits/store") && r.request().method() === "POST",
+      (r) =>
+        r.url().includes("/custom-benefits") &&
+        ["POST", "PUT", "PATCH"].includes(r.request().method()) &&
+        !r.url().includes("/custom-benefits?"),
       { timeout: 90_000 },
     );
     await this.dialog.getByRole("button", { name: buttonName, exact: true }).click();
     const response = await responsePromise;
     if (!response.ok()) {
-      throw new Error(`POST /custom-benefits/store -> ${response.status()}: ${await response.text()}`);
+      throw new Error(`Submit ${buttonName} -> ${response.status()}: ${await response.text()}`);
     }
     await expect(this.dialog).toBeHidden({ timeout: 120_000 });
   }

@@ -30,9 +30,14 @@ export async function apiLogin(cfg: PayrollApiConfig): Promise<LoginResult> {
     throw new Error(`Login API failed: ${res.status} ${await res.text()}`);
   }
   const data = await res.json();
-  if (!data.token) throw new Error("Login API returned no token");
+  const setCookies = res.headers.getSetCookie?.() ?? [];
+  const tokenCookie = setCookies
+    .map((cookie) => cookie.match(/(?:^|;\s*)hcp_token=([^;]+)/)?.[1])
+    .find((value): value is string => Boolean(value));
+  const token = data.token ?? tokenCookie ?? (data.sso_token !== "not available" ? data.sso_token : undefined);
+  if (!token) throw new Error(`Login API returned no token (fields: ${Object.keys(data).join(", ")})`);
   const me = await fetch(`${cfg.baseUrl}/api/me`, {
-    headers: { Authorization: `Bearer ${data.token}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (!me.ok) {
     throw new Error(`Fetch /api/me failed: ${me.status} ${await me.text()}`);
@@ -47,7 +52,7 @@ export async function apiLogin(cfg: PayrollApiConfig): Promise<LoginResult> {
     delete profile.current_position;
   }
   profile.position = profile.position || "-";
-  return { token: data.token, user: data.user, profile };
+  return { token, user: data.user, profile };
 }
 
 interface DeleteList {
@@ -346,6 +351,21 @@ export async function cleanupTestPayrollData(cfg: PayrollApiConfig, token: strin
   await cleanupDeductionTransferRecords(cfg, token);
 }
 
+export async function fetchWithRetry(url: string, init?: RequestInit, retries = 3, backoffMs = 1000): Promise<Response> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await fetch(url, init);
+    } catch (err) {
+      if (attempt === retries) throw err;
+      console.warn(
+        `[fetchWithRetry] Attempt ${attempt} failed for ${url} (${err instanceof Error ? err.message : String(err)}). Retrying in ${backoffMs * attempt}ms...`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, backoffMs * attempt));
+    }
+  }
+  throw new Error(`fetchWithRetry failed after ${retries} attempts for ${url}`);
+}
+
 /**
  * Pastikan karyawan punya daftar gaji (THP reguler) di server sesuai sheet
  * "DaftarGaji" di test-data.xlsx -- bukan nilai hardcoded. Dipakai suite
@@ -378,7 +398,7 @@ export async function ensureEmployeeRegulerThp(cfg: PayrollApiConfig, token: str
     `category=${payload.category} basic=${payload.basic} position=${payload.position} ` +
     `expat=${payload.expat} home=${payload.home} hotskill=${payload.hotskill} total=${payload.total}`;
 
-  const listRes = await fetch(
+  const listRes = await fetchWithRetry(
     `${cfg.baseUrl}/api/master-reguler-thp?search=${encodeURIComponent(name)}&per_page=200`,
     { headers: authHeaders },
   );
@@ -386,40 +406,35 @@ export async function ensureEmployeeRegulerThp(cfg: PayrollApiConfig, token: str
     throw new Error(`ensureEmployeeRegulerThp: list THP failed: ${listRes.status} ${await listRes.text()}`);
   }
   const existing = await listRes.json();
-  const record = (existing?.data ?? [])[0];
+  const existingList: Array<Record<string, unknown>> = Array.isArray(existing?.data) ? existing.data : [];
+  const upper = name.toUpperCase();
+  const record = existingList.find((r) => {
+    const empName = (r.employee_name ?? (r.employee as any)?.name ?? (r.employee_personal_info as any)?.name) as string | undefined;
+    return typeof empName === "string" && empName.toUpperCase().includes(upper);
+  });
+
+  let employeeUuid = record?.employee_uuid as string | undefined;
   if (record?.uuid) {
-    const resetRes = await fetch(`${cfg.baseUrl}/api/master-reguler-thp/store`, {
-      method: "POST",
-      headers: { ...authHeaders, "Content-Type": "application/json" },
-      body: JSON.stringify({ uuid: record.uuid, employee_uuid: record.employee_uuid, ...payload }),
+    const delRes = await fetchWithRetry(`${cfg.baseUrl}/api/master-reguler-thp/delete/${record.uuid}`, {
+      method: "DELETE",
+      headers: authHeaders,
     });
-    if (!resetRes.ok) {
-      throw new Error(`ensureEmployeeRegulerThp: reset failed: ${resetRes.status} ${await resetRes.text()}`);
+    if (!delRes.ok && delRes.status !== 404) {
+      throw new Error(`ensureEmployeeRegulerThp: delete old record failed: ${delRes.status} ${await delRes.text()}`);
     }
-    console.log(`[ensureEmployeeRegulerThp] THP "${name}" di-set dari sheet DaftarGaji -> ${summary}`);
-    return;
   }
 
-  const empRes = await fetch(
-    `${cfg.baseUrl}/api/employee-personal-info/employee-list?search=${encodeURIComponent(name)}&compact=1`,
-    { headers: authHeaders },
-  );
-  if (!empRes.ok) {
-    throw new Error(`ensureEmployeeRegulerThp: employee-list failed: ${empRes.status} ${await empRes.text()}`);
+  if (!employeeUuid) {
+    employeeUuid = await findEmployeeUuid(cfg, token, name);
   }
-  const emps = await empRes.json();
-  const upper = name.toUpperCase();
-  const emp = (emps?.data ?? []).find((e: { name?: string; uuid?: string }) =>
-    e?.name?.toUpperCase().includes(upper),
-  );
-  if (!emp?.uuid) {
+  if (!employeeUuid) {
     throw new Error(`ensureEmployeeRegulerThp: employee "${name}" not found`);
   }
 
-  const storeRes = await fetch(`${cfg.baseUrl}/api/master-reguler-thp/store`, {
+  const storeRes = await fetchWithRetry(`${cfg.baseUrl}/api/master-reguler-thp/store`, {
     method: "POST",
     headers: { ...authHeaders, "Content-Type": "application/json" },
-    body: JSON.stringify({ employee_uuid: emp.uuid, ...payload }),
+    body: JSON.stringify({ employee_uuid: employeeUuid, ...payload }),
   });
   if (!storeRes.ok) {
     throw new Error(`ensureEmployeeRegulerThp: store failed: ${storeRes.status} ${await storeRes.text()}`);

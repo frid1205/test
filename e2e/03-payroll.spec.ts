@@ -156,7 +156,7 @@ test.describe("Login", () => {
   });
 });
 
-test.describe("Master KKP", () => {
+test.describe.serial("Master KKP", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of (sheets.DaftarGaji ?? []).entries()) {

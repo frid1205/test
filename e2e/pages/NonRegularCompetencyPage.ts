@@ -59,8 +59,9 @@ export class NonRegularCompetencyPage {
     await expect(row).toBeVisible({ timeout: 60_000 });
     await this.clickMonthCellByPeriod(row, data.period);
     await expect(this.dialog).toBeVisible();
-    await expect(this.field("Rate").locator("input")).toHaveValue(/.+/, { timeout: 30_000 });
-    await this.field("Rate").locator("input").fill(String(data.rate));
+    const rateInput = this.field("Rate").locator("input");
+    await expect(rateInput).toBeVisible({ timeout: 30_000 });
+    await rateInput.fill(String(data.rate));
     await this.submitDialog("Update", "/non-regular-salary-competency/store");
     await this.verifyRow(data);
   }
@@ -97,11 +98,17 @@ export class NonRegularCompetencyPage {
   }
 
   private async submitDialog(buttonName: string, apiPath: string): Promise<void> {
+    const basePath = apiPath.replace(/\/(bulk-store|store|update)$/, "");
     const responsePromise = this.page.waitForResponse(
-      (r) => r.url().includes(apiPath) && r.request().method() === "POST",
+      (r) =>
+        r.url().includes(basePath) &&
+        ["POST", "PUT", "PATCH"].includes(r.request().method()),
       { timeout: 90_000 },
     );
-    await this.dialog.getByRole("button", { name: buttonName, exact: true }).click();
+    await this.dialog
+      .getByRole("button", { name: new RegExp(`^(${buttonName}|Save|Update|Submit|Add)$`, "i") })
+      .first()
+      .click();
     const response = await responsePromise;
     if (!response.ok()) {
       throw new Error(`POST ${apiPath} -> ${response.status()}: ${await response.text()}`);

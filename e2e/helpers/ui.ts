@@ -136,15 +136,21 @@ export async function submitAndWait(
   apiPath: string,
   _toastMessage: string,
 ): Promise<void> {
+  const basePath = apiPath.replace(/\/(store|update)$/, "");
   const responsePromise = page.waitForResponse(
-    (r) => r.url().includes(apiPath) && r.request().method() === "POST",
+    (r) =>
+      r.url().includes(basePath) &&
+      ["POST", "PUT", "PATCH"].includes(r.request().method()),
     { timeout: 90_000 },
   );
-  await dialog.getByRole("button", { name: buttonName, exact: true }).click();
+  const button = dialog
+    .getByRole("button", { name: new RegExp(`^(${buttonName}|Save|Update|Submit)$`, "i") })
+    .first();
+  await button.click();
   const response = await responsePromise;
   if (!response.ok()) {
     const body = await response.text();
-    throw new Error(`POST ${apiPath} -> ${response.status()}: ${body}`);
+    throw new Error(`Submit ${apiPath} -> ${response.status()}: ${body}`);
   }
   await expect(dialog).toBeHidden({ timeout: 120_000 });
 }

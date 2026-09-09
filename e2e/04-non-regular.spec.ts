@@ -53,7 +53,7 @@ const gaji13Rows = readSheet(DATA_FILE, "GajiKe13");
 const competencyRows = readSheet(DATA_FILE, "TunjanganKompetensi");
 const customRows = readSheet(DATA_FILE, "TunjanganJabatan2");
 
-test.describe("Non Regular - BFKJ", () => {
+test.describe.serial("Non Regular - BFKJ", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of bfkjRows.entries()) {
@@ -73,7 +73,7 @@ test.describe("Non Regular - BFKJ", () => {
   }
 });
 
-test.describe("Non Regular - Hometrip", () => {
+test.describe.serial("Non Regular - Hometrip", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of hometripRows.entries()) {
@@ -107,7 +107,7 @@ function toCutah(row: ExcelRow): CutahCase {
   };
 }
 
-test.describe("Non Regular - CUTAH", () => {
+test.describe.serial("Non Regular - CUTAH", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of cutahRows.entries()) {
@@ -142,7 +142,7 @@ function toGaji13(row: ExcelRow): Gaji13Case {
   };
 }
 
-test.describe("Non Regular - Gaji Ke-13", () => {
+test.describe.serial("Non Regular - Gaji Ke-13", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of gaji13Rows.entries()) {
@@ -173,7 +173,7 @@ function toCompetency(row: ExcelRow): CompetencyCase {
   };
 }
 
-test.describe("Non Regular - Tunjangan Kompetensi", () => {
+test.describe.serial("Non Regular - Tunjangan Kompetensi", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of competencyRows.entries()) {
@@ -206,7 +206,7 @@ function toCustom(row: ExcelRow): CustomCase {
   };
 }
 
-test.describe("Non Regular - Custom (tunjangan jabatan 2)", () => {
+test.describe.serial("Non Regular - Custom (tunjangan jabatan 2)", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of customRows.entries()) {

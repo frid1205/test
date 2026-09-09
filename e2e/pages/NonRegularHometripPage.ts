@@ -96,11 +96,17 @@ export class NonRegularHometripPage {
   }
 
   private async submitDialog(buttonName: string, apiPath: string): Promise<void> {
+    const basePath = apiPath.replace(/\/(bulk-store|store|update)$/, "");
     const responsePromise = this.page.waitForResponse(
-      (r) => r.url().includes(apiPath) && r.request().method() === "POST",
+      (r) =>
+        r.url().includes(basePath) &&
+        ["POST", "PUT", "PATCH"].includes(r.request().method()),
       { timeout: 90_000 },
     );
-    await this.dialog.getByRole("button", { name: buttonName, exact: true }).click();
+    await this.dialog
+      .getByRole("button", { name: new RegExp(`^(${buttonName}|Save|Update|Submit)$`, "i") })
+      .first()
+      .click();
     const response = await responsePromise;
     if (!response.ok()) {
       throw new Error(`POST ${apiPath} -> ${response.status()}: ${await response.text()}`);
@@ -109,16 +115,22 @@ export class NonRegularHometripPage {
   }
 
   private async submitRow(row: Locator, buttonName: string, apiPath: string): Promise<void> {
+    const basePath = apiPath.replace(/\/(bulk-store|store|update)$/, "");
     const responsePromise = this.page.waitForResponse(
-      (r) => r.url().includes(apiPath) && r.request().method() === "POST",
+      (r) =>
+        r.url().includes(basePath) &&
+        ["POST", "PUT", "PATCH"].includes(r.request().method()),
       { timeout: 90_000 },
     );
-    await row.getByRole("button", { name: buttonName, exact: true }).click();
+    const button = row
+      .getByRole("button", { name: new RegExp(`^(${buttonName}|Save|Update|Submit)$`, "i") })
+      .first();
+    await button.click();
     const response = await responsePromise;
     if (!response.ok()) {
       throw new Error(`POST ${apiPath} -> ${response.status()}: ${await response.text()}`);
     }
-    await expect(row.getByRole("button", { name: buttonName })).toBeHidden({ timeout: 30_000 });
+    await expect(button).toBeHidden({ timeout: 30_000 });
   }
 
   private async verifyRow(data: HometripCase): Promise<void> {

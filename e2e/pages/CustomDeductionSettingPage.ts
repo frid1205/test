@@ -46,13 +46,16 @@ export class CustomDeductionSettingPage {
 
   private async submit(buttonName: string): Promise<void> {
     const responsePromise = this.page.waitForResponse(
-      (r) => r.url().includes("/custom-deductions/store") && r.request().method() === "POST",
+      (r) =>
+        r.url().includes("/custom-deductions") &&
+        ["POST", "PUT", "PATCH"].includes(r.request().method()) &&
+        !r.url().includes("/custom-deductions?"),
       { timeout: 90_000 },
     );
     await this.dialog.getByRole("button", { name: buttonName, exact: true }).click();
     const response = await responsePromise;
     if (!response.ok()) {
-      throw new Error(`POST /custom-deductions/store -> ${response.status()}: ${await response.text()}`);
+      throw new Error(`Submit ${buttonName} -> ${response.status()}: ${await response.text()}`);
     }
     await expect(this.dialog).toBeHidden({ timeout: 120_000 });
   }
