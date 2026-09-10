@@ -8,6 +8,11 @@ export async function chooseCombobox(
   optionLabel: string,
   searchUrl?: string,
 ): Promise<void> {
+  const currentText = (await trigger.innerText().catch(() => "")).trim();
+  if (currentText && currentText.includes(optionLabel)) {
+    return;
+  }
+
   await trigger.click();
   const searchBox = page.getByPlaceholder("Search...").last();
   await searchBox.fill(searchText);
@@ -24,6 +29,7 @@ export async function chooseCombobox(
   await expect(option).toBeVisible({ timeout: 45_000 });
   await option.click();
   await expect(dialog.locator("button[role=combobox]").first()).toBeVisible();
+  await expect(trigger).not.toContainText(/select\s+/i, { timeout: 10_000 });
 }
 
 export const MONTH_NAMES_ID = [

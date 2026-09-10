@@ -83,7 +83,7 @@ const sheets = readAllSheets(DATA_FILE);
 const homestaffRaw = readSheetRaw(DATA_FILE, "Homestaff");
 const expatRaw = readSheetRaw(DATA_FILE, "ExpatLocal");
 
-test.describe.serial("Salary Deduction - Homestaff", () => {
+test.describe("Salary Deduction - Homestaff", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of (sheets.Homestaff ?? []).entries()) {
@@ -93,7 +93,7 @@ test.describe.serial("Salary Deduction - Homestaff", () => {
     test(`[Homestaff] ${c.action} - ${c.employee} (${label}) (#${idx + 1})`, async ({ page }) => {
       const { token } = await apiLogin(API_CFG);
       if (c.action === "add" || c.action === "edit") {
-        await ensureEmployeeRegulerThp(API_CFG, token, c.employee, s(row.category) || "Homestaff");
+        await ensureEmployeeRegulerThp(API_CFG, token, c.employee, s(row.category) || undefined);
       }
       const p = new HomestaffPage(page);
       await p.goto();
@@ -118,7 +118,7 @@ test.describe.serial("Salary Deduction - Homestaff", () => {
   });
 });
 
-test.describe.serial("Salary Deduction - Expat Local", () => {
+test.describe("Salary Deduction - Expat Local", () => {
   test.use({ storageState: STORAGE_STATE });
 
   for (const [idx, row] of (sheets.ExpatLocal ?? []).entries()) {
@@ -128,7 +128,7 @@ test.describe.serial("Salary Deduction - Expat Local", () => {
     test(`[Expat Local] ${c.action} - ${c.employee} (${label}) (#${idx + 1})`, async ({ page }) => {
       const { token } = await apiLogin(API_CFG);
       if (c.action === "add" || c.action === "edit") {
-        await ensureEmployeeRegulerThp(API_CFG, token, c.employee, s(row.category) || "Expat");
+        await ensureEmployeeRegulerThp(API_CFG, token, c.employee, s(row.category) || undefined);
       }
       const p = new ExpatLocalPage(page);
       await p.goto();

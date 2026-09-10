@@ -62,15 +62,21 @@ export class HomestaffPage {
 
   private async fillForm(data: HomestaffCase): Promise<void> {
     const dialog = this.dialog;
-    await chooseCombobox(this.page, dialog, dialog.locator("#lbl_0019c9_employee_428"), data.employee, data.employee, "/employee-personal-info/employee-list-homestaff");
-    await chooseCombobox(this.page, dialog, dialog.locator("#lbl_0019c9_referencerate_452"), refRateOption(data.rate), refRateOption(data.rate));
+    await chooseCombobox(this.page, dialog, dialog.getByRole("combobox", { name: "Employee" }), data.employee, data.employee, "/employee-personal-info/employee-list-homestaff");
+    await chooseCombobox(this.page, dialog, dialog.getByRole("combobox", { name: "Reference Rate" }), refRateOption(data.rate), refRateOption(data.rate));
     if (data.period) {
       const [year, month] = data.period.split("-");
-      await pickMonth(this.page, dialog.locator("#lbl_0019c9_period_467"), MONTH_NAMES_ID[Number(month) - 1], year);
+      await pickMonth(this.page, dialog.getByRole("button", { name: "Period" }), MONTH_NAMES_ID[Number(month) - 1], year);
     }
-    await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory).fill(String(data.mandatory));
-    await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.pension).fill(String(data.pension));
-    await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.dplkEmployer).fill(String(data.dplkEmployer));
+    if (data.mandatory !== "" && data.mandatory !== undefined) {
+      await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory).fill(String(data.mandatory));
+    }
+    if (data.pension !== "" && data.pension !== undefined) {
+      await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.pension).fill(String(data.pension));
+    }
+    if (data.dplkEmployer !== "" && data.dplkEmployer !== undefined) {
+      await dialog.getByLabel(HOMESTAFF_FIELD_LABELS.dplkEmployer).fill(String(data.dplkEmployer));
+    }
     await this.fillCustomFields(data);
   }
 
@@ -94,15 +100,25 @@ export class HomestaffPage {
   }
 
   async edit(data: HomestaffCase): Promise<void> {
-    const employeesLoaded = this.employeesLoaded();
-    const refsLoaded = this.referenceRatesLoaded();
+    const refsLoaded = this.referenceRatesLoaded().catch(() => undefined);
     const row = await this.searchRow(data);
     await row.getByRole("button", { name: "Edit" }).click();
     await expect(this.dialog).toBeVisible();
-    await employeesLoaded;
     await refsLoaded;
-    await expect(this.dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory)).toHaveValue(/.+/, { timeout: 30_000 });
-    await this.dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory).fill(String(data.mandatory));
+    const refRateCombobox = this.dialog.getByRole("combobox", { name: "Reference Rate" });
+    await expect(refRateCombobox).toBeVisible({ timeout: 30_000 });
+    if (data.rate !== "" && data.rate !== undefined) {
+      await chooseCombobox(this.page, this.dialog, refRateCombobox, refRateOption(data.rate), refRateOption(data.rate));
+    }
+    if (data.mandatory !== "" && data.mandatory !== undefined) {
+      await this.dialog.getByLabel(HOMESTAFF_FIELD_LABELS.mandatory).fill(String(data.mandatory));
+    }
+    if (data.pension !== "" && data.pension !== undefined) {
+      await this.dialog.getByLabel(HOMESTAFF_FIELD_LABELS.pension).fill(String(data.pension));
+    }
+    if (data.dplkEmployer !== "" && data.dplkEmployer !== undefined) {
+      await this.dialog.getByLabel(HOMESTAFF_FIELD_LABELS.dplkEmployer).fill(String(data.dplkEmployer));
+    }
     await this.fillCustomFields(data);
     await submitAndWait(this.page, this.dialog, "Update", "/master-salary-deduction-homestaff/store", "Homestaff deduction updated successfully");
     await this.verifyRow(data);

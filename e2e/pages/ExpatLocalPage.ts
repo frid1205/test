@@ -66,20 +66,32 @@ export class ExpatLocalPage {
 
   private async fillForm(data: ExpatLocalCase): Promise<void> {
     const dialog = this.dialog;
-    await chooseCombobox(this.page, dialog, dialog.locator("#lbl_2a8007_employee_353"), data.employee, data.employee, "/employee-personal-info/employee-list-expat-local");
-    await chooseCombobox(this.page, dialog, dialog.locator("#lbl_2a8007_referencerate_393"), refRateOption(data.rate), refRateOption(data.rate));
+    await chooseCombobox(this.page, dialog, dialog.getByRole("combobox", { name: "Employee" }), data.employee, data.employee, "/employee-personal-info/employee-list-expat-local");
+    await chooseCombobox(this.page, dialog, dialog.getByRole("combobox", { name: "Reference Rate" }), refRateOption(data.rate), refRateOption(data.rate));
     if (data.period) {
       const [year, month] = data.period.split("-");
-      await pickMonth(this.page, dialog.locator("#lbl_2a8007_period_408"), MONTH_NAMES_ID[Number(month) - 1], year);
+      await pickMonth(this.page, dialog.getByRole("button", { name: "Period" }), MONTH_NAMES_ID[Number(month) - 1], year);
     }
-    const zakatField = dialog.getByText(EXPAT_FIELD_LABELS.zakat, { exact: true }).locator("..");
-    await chooseSelect(this.page, zakatField.locator("[role=combobox]").first(), "Amount");
-    await dialog.getByLabel(EXPAT_FIELD_LABELS.zakat).fill(String(data.zakat));
-    await dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction).fill(String(data.employeeDeduction));
-    await dialog.getByLabel(EXPAT_FIELD_LABELS.employeeSeguranca).fill(String(data.employeeSeguranca));
-    await dialog.getByLabel(EXPAT_FIELD_LABELS.employee13Seguranca).fill(String(data.employee13Seguranca));
-    await dialog.getByLabel(EXPAT_FIELD_LABELS.employerSeguranca).fill(String(data.employerSeguranca));
-    await dialog.getByLabel(EXPAT_FIELD_LABELS.employer13Seguranca).fill(String(data.employer13Seguranca));
+    if (data.zakat !== "" && data.zakat !== undefined) {
+      const zakatField = dialog.getByText(EXPAT_FIELD_LABELS.zakat, { exact: true }).locator("..");
+      await chooseSelect(this.page, zakatField.locator("[role=combobox]").first(), "Amount");
+      await dialog.getByLabel(EXPAT_FIELD_LABELS.zakat).fill(String(data.zakat));
+    }
+    if (data.employeeDeduction !== "" && data.employeeDeduction !== undefined) {
+      await dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction).fill(String(data.employeeDeduction));
+    }
+    if (data.employeeSeguranca !== "" && data.employeeSeguranca !== undefined) {
+      await dialog.getByLabel(EXPAT_FIELD_LABELS.employeeSeguranca).fill(String(data.employeeSeguranca));
+    }
+    if (data.employee13Seguranca !== "" && data.employee13Seguranca !== undefined) {
+      await dialog.getByLabel(EXPAT_FIELD_LABELS.employee13Seguranca).fill(String(data.employee13Seguranca));
+    }
+    if (data.employerSeguranca !== "" && data.employerSeguranca !== undefined) {
+      await dialog.getByLabel(EXPAT_FIELD_LABELS.employerSeguranca).fill(String(data.employerSeguranca));
+    }
+    if (data.employer13Seguranca !== "" && data.employer13Seguranca !== undefined) {
+      await dialog.getByLabel(EXPAT_FIELD_LABELS.employer13Seguranca).fill(String(data.employer13Seguranca));
+    }
     await this.fillCustomFields(data);
   }
 
@@ -103,15 +115,36 @@ export class ExpatLocalPage {
   }
 
   async edit(data: ExpatLocalCase): Promise<void> {
-    const employeesLoaded = this.employeesLoaded();
-    const refsLoaded = this.referenceRatesLoaded();
+    const refsLoaded = this.referenceRatesLoaded().catch(() => undefined);
     const row = await this.searchRow(data);
     await row.getByRole("button", { name: "Edit" }).click();
     await expect(this.dialog).toBeVisible();
-    await employeesLoaded;
     await refsLoaded;
-    await expect(this.dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction)).toHaveValue(/.+/, { timeout: 30_000 });
-    await this.dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction).fill(String(data.employeeDeduction));
+    const refRateCombobox = this.dialog.getByRole("combobox", { name: "Reference Rate" });
+    await expect(refRateCombobox).toBeVisible({ timeout: 30_000 });
+    if (data.rate !== "" && data.rate !== undefined) {
+      await chooseCombobox(this.page, this.dialog, refRateCombobox, refRateOption(data.rate), refRateOption(data.rate));
+    }
+    if (data.zakat !== "" && data.zakat !== undefined) {
+      const zakatField = this.dialog.getByText(EXPAT_FIELD_LABELS.zakat, { exact: true }).locator("..");
+      await chooseSelect(this.page, zakatField.locator("[role=combobox]").first(), "Amount");
+      await this.dialog.getByLabel(EXPAT_FIELD_LABELS.zakat).fill(String(data.zakat));
+    }
+    if (data.employeeDeduction !== "" && data.employeeDeduction !== undefined) {
+      await this.dialog.getByLabel(EXPAT_FIELD_LABELS.employeeDeduction).fill(String(data.employeeDeduction));
+    }
+    if (data.employeeSeguranca !== "" && data.employeeSeguranca !== undefined) {
+      await this.dialog.getByLabel(EXPAT_FIELD_LABELS.employeeSeguranca).fill(String(data.employeeSeguranca));
+    }
+    if (data.employee13Seguranca !== "" && data.employee13Seguranca !== undefined) {
+      await this.dialog.getByLabel(EXPAT_FIELD_LABELS.employee13Seguranca).fill(String(data.employee13Seguranca));
+    }
+    if (data.employerSeguranca !== "" && data.employerSeguranca !== undefined) {
+      await this.dialog.getByLabel(EXPAT_FIELD_LABELS.employerSeguranca).fill(String(data.employerSeguranca));
+    }
+    if (data.employer13Seguranca !== "" && data.employer13Seguranca !== undefined) {
+      await this.dialog.getByLabel(EXPAT_FIELD_LABELS.employer13Seguranca).fill(String(data.employer13Seguranca));
+    }
     await this.fillCustomFields(data);
     await submitAndWait(this.page, this.dialog, "Save", "/master-salary-deduction-expat-local/store", "Expat Local deduction updated successfully");
     await this.verifyRow(data);
@@ -232,6 +265,11 @@ export class ExpatLocalPage {
     return row.locator("td").nth(await this.columnIndex(label));
   }
 
+  private formatCurrencyCell(value: string | number): string {
+    const num = Number(value);
+    return !num || num === 0 ? "-" : `$${currencyFormat(num)}`;
+  }
+
   private async verifyRow(data: ExpatLocalCase): Promise<void> {
     // Assert per-sel (toHaveText), bukan toContainText di level <tr>: teks seluruh
     // baris tergabung tanpa pemisah sehingga nilai kolom lain bisa ikut cocok.
@@ -240,10 +278,10 @@ export class ExpatLocalPage {
       `Rp ${Number(data.rate).toLocaleString("en-US")}`,
     );
     await expect(await this.cell(row, "Employee Deduction")).toHaveText(
-      `$${currencyFormat(data.employeeDeduction)}`,
+      this.formatCurrencyCell(data.employeeDeduction),
     );
     await expect(await this.cell(row, "Total Deduction")).toHaveText(
-      `$${currencyFormat(data.totalExpected)}`,
+      this.formatCurrencyCell(data.totalExpected),
     );
     await expect(await this.cell(row, "Period")).toHaveText(
       data.period ? this.periodLabel(data.period) : "-",
@@ -253,7 +291,7 @@ export class ExpatLocalPage {
     // dan susunan kolomnya berbeda sehingga index diresolusi ulang di sini.
     const empRow = await this.searchRow(data, "Employer Contribution");
     await expect(await this.cell(empRow, "Total Employer Contribution")).toHaveText(
-      `$${currencyFormat(data.totalEmployerExpected)}`,
+      this.formatCurrencyCell(data.totalEmployerExpected),
     );
   }
 }
