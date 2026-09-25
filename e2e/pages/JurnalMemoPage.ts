@@ -1,4 +1,5 @@
 import { type Locator, type Page, expect } from "@playwright/test";
+import { downloadExcelWithFailureDetection } from "../helpers/download";
 import { MONTH_NAMES_EN } from "../helpers/ui";
 
 export interface JurnalMemoCase {
@@ -140,12 +141,10 @@ export class JurnalMemoPage {
   }
 
   async downloadExcel(savePath: string): Promise<void> {
-    const downloadPromise = this.page.waitForEvent("download", { timeout: 120_000 });
-    await this.page.getByRole("button", { name: "Export Excel", exact: true }).first().click();
-    const download = await downloadPromise;
-    if (!download.suggestedFilename().toLowerCase().endsWith(".xlsx")) {
-      throw new Error(`Unexpected download filename: ${download.suggestedFilename()}`);
-    }
-    await download.saveAs(savePath);
+    await downloadExcelWithFailureDetection(
+      this.page,
+      this.page.getByRole("button", { name: "Export Excel", exact: true }).first(),
+      savePath,
+    );
   }
 }

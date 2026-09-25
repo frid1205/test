@@ -49,14 +49,62 @@ export function getColumnLetter(colIndex: number): string {
   return letter || 'A';
 }
 
+export interface CompareOptions {
+  ignoreDates?: boolean;
+}
+
+const MONTHS_REGEX_PART = [
+  'Januari', 'Jan', 'January', 'Janeiru', 'Janeiro',
+  'Februari', 'Feb', 'February', 'Fevereiru', 'Fevereiro',
+  'Maret', 'Mar', 'March', 'Marsu', 'Março',
+  'April', 'Apr', 'Abril', 'Abríl',
+  'Mei', 'May', 'Maio', 'Maiu',
+  'Juni', 'Jun', 'June', 'Junho', 'Juñu',
+  'Juli', 'Jul', 'July', 'Julho', 'Jullu',
+  'Agustus', 'Ags', 'Agu', 'Aug', 'August', 'Agosto', 'Agostu',
+  'September', 'Sep', 'Sept', 'Setembro', 'Setembru',
+  'Oktober', 'Okt', 'Oct', 'October', 'Outubro', 'Outubru',
+  'November', 'Nov', 'Novembro', 'Novembru',
+  'Desember', 'Des', 'Dec', 'December', 'Dezembro', 'Dezembru'
+].join('|');
+
 /**
- * Normalizes cell values to avoid false positive differences due to trailing decimals, whitespace, etc.
+ * Masks date occurrences in a string to {{DATE}} so comparisons ignore dynamic dates.
  */
-export function normalizeValue(val: any): string {
+export function maskDates(str: string): string {
+  if (!str) return str;
+
+  // 1. ISO format & timestamps: e.g. 2026-09-10T14:30:00.000Z or 2026-09-10 14:30:00 or 2026-09-10
+  let res = str.replace(/\b\d{4}[-/.]\d{1,2}[-/.]\d{1,2}(?:[T\s]\d{1,2}:\d{2}(?::\d{2})?(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?)?\b/gi, '{{DATE}}');
+
+  // 2. Textual dates: e.g. "10 September 2026", "10-Sep-2026", "10 September, 2026"
+  const textualDateRegex1 = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?[\\s\\-_/]+(?:${MONTHS_REGEX_PART})[\\s\\-_/,]+\\d{2,4}(?:[\\s,]+\\d{1,2}:\\d{2}(?::\\d{2})?(?:\\s*(?:AM|PM|am|pm))?)?\\b`, 'gi');
+  res = res.replace(textualDateRegex1, '{{DATE}}');
+
+  // 3. Textual dates reverse: e.g. "September 10, 2026", "Sep 10 2026"
+  const textualDateRegex2 = new RegExp(`\\b(?:${MONTHS_REGEX_PART})[\\s\\-_/]+\\d{1,2}(?:st|nd|rd|th)?[\\s\\-_/,]+\\d{2,4}(?:[\\s,]+\\d{1,2}:\\d{2}(?::\\d{2})?(?:\\s*(?:AM|PM|am|pm))?)?\\b`, 'gi');
+  res = res.replace(textualDateRegex2, '{{DATE}}');
+
+  // 4. Numeric dates: e.g. "10/09/2026", "10-09-2026", "10.09.2026"
+  res = res.replace(/\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}(?:[\\s,]+\\d{1,2}:\\d{2}(?::\\d{2})?(?:\\s*(?:AM|PM|am|pm))?)?\b/gi, '{{DATE}}');
+
+  // 5. Clean up redundant spaces
+  res = res.replace(/\s+/g, ' ').trim();
+
+  return res;
+}
+
+/**
+ * Normalizes cell values to avoid false positive differences due to trailing decimals, whitespace, dates, etc.
+ */
+export function normalizeValue(val: any, options: CompareOptions = { ignoreDates: true }): string {
   if (val === undefined || val === null) {
     return '';
   }
-  let str = String(val).trim();
+
+  if (val instanceof Date) {
+    return options.ignoreDates !== false ? '{{DATE}}' : val.toISOString();
+  }
 
   // If numeric string or number, standardize float formatting if applicable
   if (typeof val === 'number') {
@@ -64,15 +112,26 @@ export function normalizeValue(val: any): string {
     return Number.isInteger(val) ? val.toString() : parseFloat(val.toFixed(4)).toString();
   }
 
+  let str = String(val).trim();
+
   // Strip carriage returns
   str = str.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  if (options.ignoreDates !== false) {
+    str = maskDates(str);
+  }
+
   return str;
 }
 
 /**
  * Compare two Excel (.xlsx, .xls) files
  */
-export function compareExcelFiles(expectedFilePath: string, downloadedFilePath: string): FileComparisonResult {
+export function compareExcelFiles(
+  expectedFilePath: string,
+  downloadedFilePath: string,
+  options: CompareOptions = { ignoreDates: true }
+): FileComparisonResult {
   const fileName = path.basename(expectedFilePath);
   const result: FileComparisonResult = {
     fileName,
@@ -125,8 +184,8 @@ export function compareExcelFiles(expectedFilePath: string, downloadedFilePath: 
         const maxCols = Math.max(expRow.length, downRow.length);
 
         for (let c = 0; c < maxCols; c++) {
-          const expVal = normalizeValue(expRow[c]);
-          const downVal = normalizeValue(downRow[c]);
+          const expVal = normalizeValue(expRow[c], options);
+          const downVal = normalizeValue(downRow[c], options);
 
           if (expVal !== downVal) {
             result.isMatched = false;
@@ -162,7 +221,11 @@ export function compareExcelFiles(expectedFilePath: string, downloadedFilePath: 
 /**
  * Compare all files in expectedDir against downloadedDir
  */
-export function compareFolders(expectedDir: string, downloadedDir: string): ComparisonReport {
+export function compareFolders(
+  expectedDir: string,
+  downloadedDir: string,
+  options: CompareOptions = { ignoreDates: true }
+): ComparisonReport {
   const timestamp = new Date().toISOString();
   const expectedFiles = fs.existsSync(expectedDir)
     ? fs.readdirSync(expectedDir).filter((f) => !f.startsWith('.') && fs.statSync(path.join(expectedDir, f)).isFile())
@@ -193,12 +256,14 @@ export function compareFolders(expectedDir: string, downloadedDir: string): Comp
     processedDownloaded.add(expFile);
 
     if (expFile.endsWith('.xlsx') || expFile.endsWith('.xls')) {
-      results.push(compareExcelFiles(expPath, downPath));
+      results.push(compareExcelFiles(expPath, downPath, options));
     } else {
       // Text or binary compare fallback
       const expContent = fs.readFileSync(expPath, 'utf-8');
       const downContent = fs.readFileSync(downPath, 'utf-8');
-      if (expContent === downContent) {
+      const expNorm = normalizeValue(expContent, options);
+      const downNorm = normalizeValue(downContent, options);
+      if (expNorm === downNorm) {
         results.push({
           fileName: expFile,
           isMatched: true,

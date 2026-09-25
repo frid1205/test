@@ -1,4 +1,5 @@
 import { type Locator, type Page, expect } from "@playwright/test";
+import { downloadExcelWithFailureDetection } from "../helpers/download";
 import { MONTH_NAMES_ID, chooseSelect, formField, pickDate, pickMonth } from "../helpers/ui";
 
 export interface RekapBayarCase {
@@ -207,12 +208,10 @@ export class RekapBayarPage {
     if (reportType === RECEIPT_REPORT) {
       await this.openFirstBankReceipt();
     }
-    const downloadPromise = this.page.waitForEvent("download", { timeout: 120_000 });
-    await this.page.getByRole("button", { name: EXPORT_EXCEL_BUTTON }).first().click();
-    const download = await downloadPromise;
-    if (!download.suggestedFilename().toLowerCase().endsWith(".xlsx")) {
-      throw new Error(`Unexpected download filename: ${download.suggestedFilename()}`);
-    }
-    await download.saveAs(savePath);
+    await downloadExcelWithFailureDetection(
+      this.page,
+      this.page.getByRole("button", { name: EXPORT_EXCEL_BUTTON }).first(),
+      savePath,
+    );
   }
 }
