@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<TestCaseEntity>
-   <description>Pengujian RESTful API: Katalon berperan sebagai Producer (POST) dan Consumer (GET + Data Assertion)</description>
-   <name>REST_API_Producer_Consumer_Test</name>
-   <tag>api,rest,producer,consumer</tag>
-   <comment></comment>
-   <testCaseGuid>3a1b2c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d</testCaseGuid>
-</TestCaseEntity>

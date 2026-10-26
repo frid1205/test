@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<TestCaseEntity>
-   <description>Pengujian Apache Kafka: Katalon berperan sebagai Consumer (Subscribe, Polling, Message Assertion)</description>
-   <name>Kafka_Consumer_Test</name>
-   <tag>kafka,consumer,messaging,event-driven</tag>
-   <comment></comment>
-   <testCaseGuid>8e7d6c5b-4a3f-2e1d-0c9b-8a7f6e5d4c3b</testCaseGuid>
-</TestCaseEntity>
