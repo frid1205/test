@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description>End-to-End Integration: REST API Producer -> Kafka Event -> Kafka Consumer Verification</description>
+   <name>End_to_End_Integration_Test</name>
+   <tag>e2e,integration,api,kafka</tag>
+   <comment></comment>
+   <testCaseGuid>9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c</testCaseGuid>
+</TestCaseEntity>

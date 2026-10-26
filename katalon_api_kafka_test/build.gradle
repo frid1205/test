@@ -1,0 +1,24 @@
+plugins {
+  id 'java'
+  id 'groovy'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  // Apache Kafka Clients for Consumer testing
+  implementation 'org.apache.kafka:kafka-clients:3.6.1'
+  
+  // Logging dependencies
+  implementation 'org.slf4j:slf4j-api:1.7.36'
+  implementation 'org.slf4j:slf4j-simple:1.7.36'
+
+  // Compression libraries required by Kafka
+  implementation 'org.xerial.snappy:snappy-java:1.1.10.5'
+  implementation 'org.lz4:lz4-java:1.8.0'
+  
+  // JSON processing
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+}

@@ -1,0 +1,4 @@
+order_id,msisdn,package_name,price,currency,status
+ORD-001,+670-77112233,Unlimited Data 30D,15.00,USD,SUCCESS
+ORD-002,+670-77223344,Super Voice 1000Min,5.00,USD,SUCCESS
+ORD-003,+670-77334455,Combo Roaming Regional,25.00,USD,PENDING
